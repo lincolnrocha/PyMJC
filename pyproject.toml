@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "pymjc"
+version = "0.1.0"
+description = "Python Compiler for MiniJava"
+authors = ["Lincoln S. Rocha <lincoln@dc.ufc.br>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+sly = "^0.4"
+
+[tool.poetry.dev-dependencies]
+ipykernel = "^6.11.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

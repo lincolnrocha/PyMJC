@@ -1,0 +1,82 @@
+{
+    "BinarySearch.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": false
+    },
+    "BinaryTree.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": false
+    },
+    "BubbleSort.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": false
+    },
+    "Factorial.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": false
+    },
+    "LinearSearch.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": false
+    },
+    "LinkedList.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": false
+    },
+    "QuickSort.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": false
+    },
+    "TreeVisitor.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": false
+    },
+    "SyntaxFaultyBinarySearch.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": true
+    },
+    "SyntaxFaultyBinaryTree.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": true
+    },
+    "SyntaxFaultyBubbleSort.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": true
+    },
+    "SyntaxFaultyFactorial.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": true
+    },
+    "SyntaxFaultyLinearSearch.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": true
+    },
+    "SyntaxFaultyLinkedList.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": true
+    },
+    "SyntaxFaultyQuickSort.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": true
+    },
+    "SyntaxFaultyTreeVisitor.java": {
+        "number_of_shift_reduce": 0,
+        "number_of_reduce_reduce": 0,
+        "has_parser_error": true
+    }
+}
