@@ -4,11 +4,11 @@ Este repositório tem como objetivo fazer as entregas do projeto da disciplina d
 
 # Equipe Responável
 
-Os seguintes alunos (equipe XXXXX) são responsáveis pelo projeto: 
+Os seguintes alunos (equipe 02) são responsáveis pelo projeto: 
 
--  Mátricula: XXXX | Aluno: XXXXX 
--  Mátricula: XXXX | Aluno: XXXXX
--  Mátricula: XXXX | Aluno: XXXXX
+-  Mátricula: 470692  | Aluno: Gabriel Passos Urano de Carvalho
+-  Mátricula: 472078  | Aluno: João Gabriel Brilhante Cordeiro 
+-  Mátricula: 471913  | Aluno: Laura Maria Alencar Leal Petrola
 
 # Método de Avaliação
 
