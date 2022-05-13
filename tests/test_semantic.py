@@ -10,7 +10,7 @@ from pymjc.front.visitor import FillSymbolTableVisitor, TypeCheckingVisitor
 from tests import util
 
 
-class ParserTest(unittest.TestCase):
+class SemanticTest(unittest.TestCase):
     
     actual_values = {}
     
