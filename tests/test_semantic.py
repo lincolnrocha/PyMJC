@@ -47,10 +47,12 @@ class ParserTest(unittest.TestCase):
                 parser.src_file_name = file_name
                 program: Program = parser.parse(lexer.tokenize(content))
                 symbol_table_creator = FillSymbolTableVisitor()
+                symbol_table_creator.src_file_name = file_name
                 symbol_table_creator.init_semantic_errors()
                 symbol_table_creator.visit_program(program)
 
                 type_checker = TypeCheckingVisitor()
+                type_checker.src_file_name = file_name
                 type_checker.fill_semantic_errors(symbol_table_creator.semantic_errors)
                 type_checker.set_symbol_table(symbol_table_creator.get_symbol_table())
                 type_checker.visit_program(program)

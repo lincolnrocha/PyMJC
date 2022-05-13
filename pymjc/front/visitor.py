@@ -660,6 +660,7 @@ class FillSymbolTableVisitor(Visitor):
         super().__init__()
         self.semantic_errors = {}
         self.symbol_table = SymbolTable()
+        self.src_file_name = "UnknownSRCFile"
 
     def init_semantic_errors(self) -> None:
         for error_type in SemanticErrorType:
@@ -1136,6 +1137,7 @@ class TypeCheckingVisitor(TypeVisitor):
     def __init__(self) -> None:
         super().__init__()
         self.semantic_errors = {}
+        self.src_file_name = "UnknownSRCFile"
 
     def init_semantic_errors(self) -> None:
         for error_type in SemanticErrorType:

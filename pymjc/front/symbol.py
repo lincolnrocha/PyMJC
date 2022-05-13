@@ -1,3 +1,6 @@
+from __future__ import annotations
+from typing import Type
+
 class Symbol():
     
     def __init__(self, name: str) -> None:
@@ -5,11 +8,11 @@ class Symbol():
     
     dictionary = {}
 
-    def to_string(self):
+    def to_string(self) -> str:
         return self.name
 
     
-    def symbol(name: str):
+    def symbol(name: str) -> Symbol:
         symbol: Symbol = Symbol.dictionary[name]
         
         if symbol is None:
@@ -20,7 +23,7 @@ class Symbol():
 
 class MethodEntry():
 
-    def __init__(self, type) -> None:
+    def __init__(self, type: Type) -> None:
         self.return_type = type
         self.locals = {}
         self.param = {}
@@ -29,26 +32,26 @@ class MethodEntry():
     def get_params(self):
         return self.param
 
-    def get_param(self, id: str):
+    def get_param_by_name(self, id: str) -> Type:
         return self.param[Symbol.symbol(id).to_string()]
 
     def get_locals(self):
         return self.locals
 
-    def get_locals(self, id: str):
+    def get_locals(self, id: str) -> Type:
         return self.locals[Symbol.symbol(id).to_string()]        
 
     def get_num_params(self) -> int:
         return self.param_list.size()
 
-    def get_param(self, pos: int):
+    def get_param_by_position(self, pos: int) -> Type:
         return self.param_list[pos]
 
-    def get_return_type(self): 
+    def get_return_type(self) -> Type:
         return self.return_type
 
-    def add_local(self, id: str, type) -> bool:
-        if(self.contains_local(Symbol.symbol(id)) or self.contains_param(Symbol.symbol(id))):
+    def add_local(self, id: str, type: Type) -> bool:
+        if(self.contains_local(Symbol.symbol(id).to_string()) or self.contains_param(Symbol.symbol(id).to_string())):
             return False
         else:
             self.locals[Symbol.symbol(id).to_string()] = type
@@ -56,8 +59,8 @@ class MethodEntry():
         return True
 
 
-    def add_param(self, id: str, type) -> bool:
-        if(self.contains_param(Symbol.symbol(id))):
+    def add_param(self, id: str, type: Type) -> bool:
+        if(self.contains_param(Symbol.symbol(id).to_string())):
             return False
         else:
             self.param[Symbol.symbol(id).to_string()] = type
@@ -93,7 +96,7 @@ class ClassEntry():
     def get_fields(self):
         return self.fields
 
-    def get_field(self, id: str):
+    def get_field(self, id: str) -> Type:
         return self.fields[Symbol.symbol(id).to_string()]
     
     def get_methods(self):
@@ -102,8 +105,8 @@ class ClassEntry():
     def get_method(self, id: str) -> MethodEntry:
         return self.methods[Symbol.symbol(id).to_string()]    
     
-    def add_var(self, id : str, type) -> bool:
-        if(self.contains_field(Symbol.symbol(id))):
+    def add_var(self, id : str, type: Type) -> bool:
+        if(self.contains_field(Symbol.symbol(id).to_string())):
             return False
         else:
             self.fields[Symbol.symbol(id).to_string()] = type
@@ -111,7 +114,7 @@ class ClassEntry():
         return True
 
     def add_method(self, id: str, entry: MethodEntry) -> bool:
-        if(self.contains_method()):
+        if(self.contains_method(Symbol.symbol(id).to_string())):
             return False
         else:
             self.methods[Symbol.symbol(id).to_string()]= entry
@@ -129,14 +132,12 @@ class ClassEntry():
 
 class SymbolTable():
     
-
     def __init__(self) -> None:
         self.class_scopes = {}
         self.curr_class = None
         self.curr_method = None
         self.curr_class_name = None
-        self.curr_method_name = None        
-        pass
+        self.curr_method_name = None
 
     def contains_key(self, id: str) -> bool:
         return Symbol.symbol(id).to_string() in self.class_scopes
@@ -187,11 +188,11 @@ class SymbolTable():
             return False
         
 
-    def add_field(self, id: str, type) -> bool:
+    def add_field(self, id: str, type: Type) -> bool:
         return self.curr_class.add_var(id, type)
 
-    def add_param(self, id: str, type) -> bool:
+    def add_param(self, id: str, type: Type) -> bool:
         return self.curr_method.add_param(id, type)
 
-    def add_local(self, id: str, type) -> bool:
+    def add_local(self, id: str, type: Type) -> bool:
         return self.curr_method.add_local(id, type)

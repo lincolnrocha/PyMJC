@@ -5,7 +5,7 @@ description = "Python Compiler for MiniJava"
 authors = ["Lincoln S. Rocha <lincoln@dc.ufc.br>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.9.0"
 sly = "^0.4"
 
 [tool.poetry.dev-dependencies]
