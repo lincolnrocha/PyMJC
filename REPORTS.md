@@ -56,7 +56,7 @@
 
 6. Quais as dificuldades encontradas para realização da etapa do projeto?
     
-    > Entender as recursões!!!!
+    > Entender as recursões à esquerda!!!! LEFTPARENT Expression RIGHTPARENT: Exp()?
 
 7. Qual a participação de cada membro da equipe na etapa de execução?
     
