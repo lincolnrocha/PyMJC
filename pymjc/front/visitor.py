@@ -689,10 +689,10 @@ class FillSymbolTableVisitor(Visitor):
         element.class_name_identifier.accept(self)
 
     def visit_class_decl_extends(self, element: ClassDeclExtends) -> None:
+        classEntry = ClassEntry(element.super_class_name.name)
         newElement = self.symbol_table.add_scope(element.class_name.name, classEntry)
         if(not newElement):
             self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_CLASS)
-        classEntry = ClassEntry(element.super_class_name.name)
         if(not self.symbol_table.contains_key(element.super_class_name.name)):
             self.add_semantic_error(SemanticErrorType.UNDECLARED_SUPER_CLASS)
         else:
