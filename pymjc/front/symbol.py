@@ -79,7 +79,7 @@ class MethodEntry():
 
 class ClassEntry():
 
-    def __int__(self, supper_class_id: str = None):
+    def __init__(self, supper_class_id: str = None):
         self.fields = {}
         self.methods = {}
         self.supper_class_id = supper_class_id

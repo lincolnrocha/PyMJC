@@ -10,14 +10,14 @@ class A {
 class B {
 
     public int oneMethod(boolean param){
-		    return param ;
+		return param ;
     }
 
     public int twoMethod(boolean param, boolean paramB, boolean paramB){
-		    return param ;
+		return param ;
     }
 
     public int threeMethod(int param01, int param02, int param03){
-		    return param01 ;
+		return param01 ;
     }
 }
