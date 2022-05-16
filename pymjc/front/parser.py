@@ -4,33 +4,34 @@ from sly import Parser
 
 from pymjc.log import MJLogger
 
+
 class MJParser(Parser):
 
     def __init__(self):
         self.syntax_error = False
         self.src_file_name = "UnknownSRCFile"
         super().__init__
-        
+
     precedence = (('nonassoc', LESS, AND),
-                  ('left', PLUS, MINUS),        
+                  ('left', PLUS, MINUS),
                   ('left', TIMES),
                   ('right', NOT)
-                 )
-                 
+                  )
+
     tokens = MJLexer.tokens
 
     syntax_error = False
 
     debugfile = 'parser.out'
 
-
     ###################################
-	#Program and Class Declarations   #
-    ###################################    
+    #Program and Class Declarations   #
+    ###################################
+
     @_('MainClass ClassDeclarationStar')
     def Goal(self, p):
         return Program(p.MainClass, p.ClassDeclarationStar)
-    
+
     @_('CLASS Identifier LEFTBRACE PUBLIC STATIC VOID MAIN LEFTPARENT STRING LEFTSQRBRACKET RIGHTSQRBRACKET Identifier RIGHTPARENT LEFTBRACE Statement RIGHTBRACE RIGHTBRACE')
     def MainClass(self, p):
         return MainClass(p.Identifier0, p.Identifier1, p.Statement)
@@ -54,7 +55,7 @@ class MJParser(Parser):
     @_('Empty')
     def SuperOpt(self, p):
         return None
-    
+
     @_('EXTENDS Identifier')
     def SupersOpt(self, p):
         return p.Identifier
@@ -88,15 +89,15 @@ class MJParser(Parser):
     @_('Empty')
     def FormalParamListOpt(self, p):
         return None
-        
+
     @_('FormalParamStar')
-    def FormalParamListOpt(self, p):  
+    def FormalParamListOpt(self, p):
         return p.FormalParamStar
 
     @_('FormalParam')
     def FormalParamStar(self, p):
         p.FormalParamStar.add_element(p.FormalParam)
-        return FormalParamStar
+        return p.FormalParamStar
 
     @_('FormalParamStar COMMA FormalParam')
     def FormalParamStar(self, p):
@@ -105,7 +106,7 @@ class MJParser(Parser):
     @_('Type Identifier')
     def FormalParam(self, p):
         return Formal(p.Type, p.Identifier)
-        
+
     ###################################
     #Type Declarations                #
     ###################################
@@ -201,7 +202,7 @@ class MJParser(Parser):
 
     @_('Empty')
     def ExpressionListOpt(self, p):
-        return None
+        return ExpList()
 
     @_('ExpressionListStar')
     def ExpressionListOpt(self, p):
@@ -209,11 +210,13 @@ class MJParser(Parser):
 
     @_('Expression')
     def ExpressionListStar(self, p):
-        p.ExpressionListStar.add_element(p.Expression)
-        return p.ExpressionListStar
+        expr_list = ExpList()
+        expr_list.add_element(p.Expression)
+        return expr_list
 
     @_('ExpressionListStar COMMA Expression')
     def ExpressionListStar(self, p):
+        p.ExpressionListStar.add_element(p.Expression)
         return p.ExpressionListStar
 
     @_('THIS')
@@ -234,7 +237,7 @@ class MJParser(Parser):
 
     @_('LEFTPARENT Expression RIGHTPARENT')
     def Expression(self, p):
-        return Exp()
+        return p.Expression
 
     @_('Identifier')
     def Expression(self, p):
@@ -255,10 +258,10 @@ class MJParser(Parser):
     def Empty(self, p):
         return None
 
-
     ##################################
     #Literals Declarations           #
     ##################################
+
     @_('BooleanLiteral')
     def Literal(self, p):
         return p.BooleanLiteral
