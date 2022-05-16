@@ -88,27 +88,17 @@ class MJParser(Parser):
 
     @_('Empty')
     def FormalParamListOpt(self, p):
-<<<<<<< HEAD
         return FormalList()
         
-=======
-        return None
-
->>>>>>> 838d4155e593bdb6f0edafd8e355d8548821b1b6
     @_('FormalParamStar')
     def FormalParamListOpt(self, p):
         return p.FormalParamStar
 
     @_('FormalParam')
     def FormalParamStar(self, p):
-<<<<<<< HEAD
         formal_list = FormalList()
         formal_list.add_element(p.FormalParam)
         return formal_list
-=======
-        p.FormalParamStar.add_element(p.FormalParam)
-        return p.FormalParamStar
->>>>>>> 838d4155e593bdb6f0edafd8e355d8548821b1b6
 
     @_('FormalParamStar COMMA FormalParam')
     def FormalParamStar(self, p):
