@@ -49,14 +49,14 @@ class MJParser(Parser):
         if p.SuperOpt is None:
             return ClassDeclSimple(p.Identifier, p.VarDeclarationStar, p.MethodDeclarationStar)
         else:
-            return ClassDeclExtends(p.Identifier, p.SupersOpt, p.VarDeclarationStar, p.MethodDeclarationStar)
+            return ClassDeclExtends(p.Identifier, p.SuperOpt, p.VarDeclarationStar, p.MethodDeclarationStar)
 
     @_('Empty')
     def SuperOpt(self, p):
         return None
     
     @_('EXTENDS Identifier')
-    def SupersOpt(self, p):
+    def SuperOpt(self, p):
         return p.Identifier
 
     @_('Empty')
