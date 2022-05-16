@@ -1,7 +1,9 @@
 class A {
     public static void main(String[] args){
-        System.out.println(new B().oneMethod(20));
-        System.out.println(new B().threeMethod(20,10));
+        {
+            System.out.println(new B().oneMethod(20));
+            System.out.println(new B().threeMethod(20,10));
+        }
     }
 }
 

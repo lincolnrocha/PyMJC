@@ -17,7 +17,7 @@ class MJCompiler():
 
         print("AST PrettyPrintVisitor")
         visitor = PrettyPrintVisitor()
-        visitor.visit_program(element=result)
+        visitor.visit_program(result)
 
 if __name__ == '__main__':
     args = sys.argv[1:]
