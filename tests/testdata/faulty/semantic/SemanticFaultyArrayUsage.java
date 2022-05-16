@@ -9,7 +9,7 @@ class B {
     public int oneMethod(){
       int[] aux1;
       int aux2;
-      int aux3[];
+      int[] aux3;
       boolean value;
 
       value = true;

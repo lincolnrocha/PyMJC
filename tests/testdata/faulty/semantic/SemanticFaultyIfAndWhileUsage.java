@@ -7,16 +7,16 @@ class A {
 class B {
 
     public int oneMethod(){
-      int intArg;
+        int intArg;
 
-      intArg = -1;
+        intArg = -1;
 
-      if (intArg * 2) System.out.println(1) ;
-	    else System.out.println(0) ;
+        if (intArg * 2) System.out.println(1) ;
+        else System.out.println(0) ;
 
-      while (intArg * 2) System.out.println(1) ;
+        while (intArg * 2) System.out.println(1) ;
 	    
-		  return 0 ;
+		return 0 ;
     }
 
 }

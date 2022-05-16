@@ -13,7 +13,7 @@ class Symbol():
 
     
     def symbol(name: str) -> Symbol:
-        symbol: Symbol = Symbol.dictionary[name]
+        symbol: Symbol = Symbol.dictionary.get(name)
         
         if symbol is None:
             symbol = Symbol(name)
@@ -79,12 +79,7 @@ class MethodEntry():
 
 class ClassEntry():
 
-    def __int__(self):
-        self.fields = {}
-        self.methods = {}
-        self.supper_class_id = None
-
-    def __int__(self, supper_class_id: str):
+    def __init__(self, supper_class_id: str = None):
         self.fields = {}
         self.methods = {}
         self.supper_class_id = supper_class_id

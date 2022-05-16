@@ -9,7 +9,6 @@ class B {
     public int oneMethod(int param){
 		boolean a;
 		int b;
-
 		a = !b;
 
 		return param ;
