@@ -87,7 +87,7 @@ class MJParser(Parser):
 
     @_('Empty')
     def FormalParamListOpt(self, p):
-        return None
+        return FormalList()
         
     @_('FormalParamStar')
     def FormalParamListOpt(self, p):  
@@ -95,11 +95,13 @@ class MJParser(Parser):
 
     @_('FormalParam')
     def FormalParamStar(self, p):
-        p.FormalParamStar.add_element(p.FormalParam)
-        return FormalParamStar
+        formal_list = FormalList()
+        formal_list.add_element(p.FormalParam)
+        return formal_list
 
     @_('FormalParamStar COMMA FormalParam')
     def FormalParamStar(self, p):
+        p.FormalParamStar.add_element(p.FormalParam)
         return p.FormalParamStar
 
     @_('Type Identifier')
@@ -201,7 +203,7 @@ class MJParser(Parser):
 
     @_('Empty')
     def ExpressionListOpt(self, p):
-        return None
+        return ExpList()
 
     @_('ExpressionListStar')
     def ExpressionListOpt(self, p):
@@ -209,11 +211,13 @@ class MJParser(Parser):
 
     @_('Expression')
     def ExpressionListStar(self, p):
-        p.ExpressionListStar.add_element(p.Expression)
-        return p.ExpressionListStar
+        expr_list = ExpList()
+        expr_list.add_element(p.Expression)
+        return expr_list
 
     @_('ExpressionListStar COMMA Expression')
     def ExpressionListStar(self, p):
+        p.ExpressionListStar.add_element(p.Expression)
         return p.ExpressionListStar
 
     @_('THIS')
@@ -234,7 +238,7 @@ class MJParser(Parser):
 
     @_('LEFTPARENT Expression RIGHTPARENT')
     def Expression(self, p):
-        return Exp()
+        return p.Expression
 
     @_('Identifier')
     def Expression(self, p):
