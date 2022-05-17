@@ -663,8 +663,7 @@ class FillSymbolTableVisitor(Visitor):
         newElement = self.symbol_table.add_scope(
             element.class_name.name, classEntry)
         if(not newElement):
-            self.add_semantic_error(
-                SemanticErrorType.ALREADY_DECLARED_CLASS, element.class_name.name)
+            self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_CLASS)
         for var_index in range(element.var_decl_list.size()):
             element.var_decl_list.element_at(var_index).accept(self)
         for method_index in range(element.method_decl_list.size()):
@@ -679,8 +678,7 @@ class FillSymbolTableVisitor(Visitor):
             newElement = self.symbol_table.add_field(
                 element.name.name, element.type)
         if(not newElement):
-            self.add_semantic_error(
-                SemanticErrorType.ALREADY_DECLARED_VAR, element.name.name)
+            self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_VAR)
         element.type.accept(self)
         element.name.accept(self)
 
@@ -689,8 +687,7 @@ class FillSymbolTableVisitor(Visitor):
         newElement = self.symbol_table.add_method(
             element.name.name, methodEntry)
         if(not newElement):
-            self.add_semantic_error(
-                SemanticErrorType.ALREADY_DECLARED_METHOD, element.name.name)
+            self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_METHOD)
         for formal_index in range(element.formal_param_list.size()):
             element.formal_param_list.element_at(formal_index).accept(self)
         for var_index in range(element.var_decl_list.size()):
@@ -705,8 +702,7 @@ class FillSymbolTableVisitor(Visitor):
         newElement = self.symbol_table.add_param(
             element.name.name, element.type)
         if(not newElement):
-            self.add_semantic_error(
-                SemanticErrorType.DUPLICATED_ARG, element.name.name)
+            self.add_semantic_error(SemanticErrorType.DUPLICATED_ARG)
         element.type.accept(self)
         element.name.accept(self)
 
