@@ -1,6 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 import enum
+from xmlrpc.client import boolean
 
 from pymjc.front.ast import *
 from pymjc.front.symbol import *
@@ -1166,7 +1167,8 @@ class TypeCheckingVisitor(TypeVisitor):
         pass
 
     def visit_method_decl(self, element: MethodDecl) -> Type:
-        pass
+        if(element.type != element.return_exp):
+            self.add_semantic_error(SemanticErrorType.RETURN_TYPE_MISMATCH)
 
     def visit_formal(self, element: Formal) -> Type:
         pass
@@ -1187,40 +1189,58 @@ class TypeCheckingVisitor(TypeVisitor):
         pass
 
     def visit_if(self, element: If) -> Type:
-        pass
+        if(type(element.condition_exp) != bool):
+            self.add_semantic_error(SemanticErrorType.IF_TYPE_MISMATCH)
 
     def visit_while(self, element: While) -> Type:
-        pass
+        if(type(element.condition_exp) != bool):
+            self.add_semantic_error(SemanticErrorType.WHILE_TYPE_MISMATCH)
 
     def visit_print(self, element: Print) -> Type:
         pass
 
     def visit_assign(self, element: Assign) -> Type:
-        pass
+        if(not self.symbol_table.curr_method.contains_local(element.left_side.name)):
+            self.add_semantic_error(SemanticErrorType.UNDECLARED_IDENTIFIER)
+        elif(self.symbol_table.curr_method.locals[element.left_side.name] != type(element.right_side)):
+            self.add_semantic_error(SemanticErrorType.ASSIGN_TYPE_MISMATCH)
 
     def visit_array_assign(self, element: ArrayAssign) -> Type:
-        pass
+        if(not self.symbol_table.curr_method.contains_local(element.array_name.name)):
+            self.add_semantic_error(SemanticErrorType.UNDECLARED_IDENTIFIER)
+        elif(self.symbol_table.curr_method.locals[element.array_name.name] != type(element.right_side)):
+            self.add_semantic_error(SemanticErrorType.ASSIGN_TYPE_MISMATCH)
 
     def visit_and(self, element: And) -> Type:
-        pass
+        if(type(element.left_side) != bool or type(element.right_side) != bool):
+            self.add_semantic_error(SemanticErrorType.AND_TYPE_MISMATCH)
 
     def visit_less_than(self, element: LessThan) -> Type:
-        pass
+        if(type(element.left_side) != int or type(element.right_side) != int):
+            self.add_semantic_error(SemanticErrorType.AND_TYPE_MISMATCH)
 
     def visit_plus(self, element: Plus) -> Type:
-        pass
+        if(type(element.left_side) != type(element.right_side)):
+            self.add_semantic_error(SemanticErrorType.PLUS_TYPE_MISMATCH)
 
     def visit_minus(self, element: Minus) -> Type:
-        pass
+        if(type(element.left_side) != type(element.right_side)):
+            self.add_semantic_error(SemanticErrorType.MINUS_TYPE_MISMATCH)
 
     def visit_times(self, element: Times) -> Type:
-        pass
+        if(type(element.left_side) != type(element.right_side)):
+            self.add_semantic_error(SemanticErrorType.TIMES_TYPE_MISMATCH)
 
     def visit_array_lookup(self, element: ArrayLookup) -> Type:
-        pass
+        if(type(element.out_side_exp) != list):
+            self.add_semantic_error(SemanticErrorType.ARRAY_TYPE_MISMATCH)
+        if(type(element.in_side_exp) != int):
+            self.add_semantic_error(SemanticErrorType.INDEX_TYPE_MISMATCH)
 
     def visit_array_length(self, element: ArrayLength) -> Type:
-        pass
+        if(type(element.length_exp) != list):
+            self.add_semantic_error(
+                SemanticErrorType.ARRAY_LENGTH_TYPE_MISMATCH)
 
     def visit_call(self, element: Call) -> Type:
         pass
@@ -1241,13 +1261,17 @@ class TypeCheckingVisitor(TypeVisitor):
         pass
 
     def visit_new_array(self, element: NewArray) -> Type:
-        pass
+        if(type(element.new_exp) != int):
+            self.add_semantic_error(SemanticErrorType.NEW_ARRAY_TYPE_MISMATCH)
 
     def visit_new_object(self, element: NewObject) -> Type:
-        pass
+        if(not self.symbol_table.contains_key(element.object_name.name)):
+            self.add_semantic_error(
+                SemanticErrorType.NEW_OBJECT_UNDECLARED_CLASS)
 
     def visit_not(self, element: Not) -> Type:
-        pass
+        if(type(element.left_side) != bool):
+            self.add_semantic_error(SemanticErrorType.NOT_TYPE_MISMATCH)
 
     def visit_identifier(self, element: Identifier) -> Type:
         pass
