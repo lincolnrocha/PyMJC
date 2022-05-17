@@ -15,7 +15,7 @@ class MJParser(Parser):
                   ('left', PLUS, MINUS),        
                   ('left', TIMES),
                   ('right', NOT),
-                  ('right', DOT)
+                  ('left', DOT)
                  )
                  
     tokens = MJLexer.tokens
