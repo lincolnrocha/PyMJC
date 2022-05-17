@@ -16,7 +16,7 @@ class B {
       value = true;
       aux1 = new int[3];
       aux1[0] = value;
-      aux1[value];
+      aux4 = aux1[value];
       aux4 = aux2[0];
       aux4 = aux2.length;
       aux3 = new int[value];

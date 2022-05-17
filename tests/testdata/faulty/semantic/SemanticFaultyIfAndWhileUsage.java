@@ -9,7 +9,7 @@ class B {
     public int oneMethod(){
         int intArg;
 
-        intArg = -1;
+        intArg = 0-1;
 
         if (intArg * 2) System.out.println(1) ;
         else System.out.println(0) ;

@@ -14,9 +14,10 @@ class B extends D {
     public int otherMethod(){
         C obj1;
         B obj2;
+        int aux;
         obj1 = new C();
         obj2 = new B();
-        obj2.twoMethod();
+        aux = obj2.twoMethod();
 		    return 0;
     }
 
