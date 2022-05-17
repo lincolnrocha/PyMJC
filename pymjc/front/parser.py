@@ -14,7 +14,8 @@ class MJParser(Parser):
     precedence = (('nonassoc', LESS, AND),
                   ('left', PLUS, MINUS),        
                   ('left', TIMES),
-                  ('right', NOT)
+                  ('right', NOT),
+                  ('right', DOT)
                  )
                  
     tokens = MJLexer.tokens
