@@ -36,31 +36,31 @@
 
 1. Qual é o nome do relator?
 
-    > Escreva sua resposta aqui
+    > João Gabriel Brilhante Cordeiro.
 
 2. A etapa foi completamente ou parcialmente concluída?
 
-    > Escreva sua resposta aqui
+    > Parcialmente.
 
 3. No caso de parcialmente concluída, o que não foi concluído?
 
-    > Escreva sua resposta aqui
+    > Erros não encontrados.
 
 4. O programa passa nos testes automatizados?
     
-    > Escreva sua resposta aqui
+    > Não, falham 21 testes.
 
 5. Algum erro de execução foi encontrado para alguma das entradas? Quais?
     
-    > Escreva sua resposta aqui
+    > Ao todo, 21 entradas falharam.
 
 6. Quais as dificuldades encontradas para realização da etapa do projeto?
     
-    > Entender as recursões à esquerda!!!! LEFTPARENT Expression RIGHTPARENT: Exp()?
+    > Entender as recursões à esquerda, no início. Ao terminar a população da tabela de símbolos, demoramos para entender a checagem de tipos.
 
 7. Qual a participação de cada membro da equipe na etapa de execução?
     
-    > Escreva sua resposta aqui
+    > Pair programming.
 
 
 # 3º Relatóio: Etapa AI-c (Tradução para o Código Intermediário)
