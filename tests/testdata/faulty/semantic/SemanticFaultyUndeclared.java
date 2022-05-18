@@ -16,8 +16,8 @@ class B extends D {
         B obj2;
         obj1 = new C();
         obj2 = new B();
-        obj2.twoMethod();
-		    return 0;
+        System.out.println(obj2.twoMethod());
+		return 0;
     }
 
 }
