@@ -5,6 +5,7 @@ import enum
 from pymjc.front.ast import *
 from pymjc.front.symbol import *
 
+
 class SemanticErrorType(enum.Enum):
     ALREADY_DECLARED_CLASS = 1
     ALREADY_DECLARED_METHOD = 2
@@ -30,9 +31,10 @@ class SemanticErrorType(enum.Enum):
     UNDECLARED_CLASS = 22
     UNDECLARED_IDENTIFIER = 23
     UNDECLARED_METHOD = 24
-    UNDECLARED_SUPER_CLASS = 25 
+    UNDECLARED_SUPER_CLASS = 25
     WHILE_TYPE_MISMATCH = 26
     WRONG_ARG_NUMBER = 27
+
 
 ########################################
 # AST Simple Visitors
@@ -59,7 +61,7 @@ class Visitor(ABC):
     @abstractmethod
     def visit_var_decl(self, element: VarDecl) -> None:
         pass
-  
+
     @abstractmethod
     def visit_method_decl(self, element: MethodDecl) -> None:
         pass
@@ -91,7 +93,7 @@ class Visitor(ABC):
     @abstractmethod
     def visit_if(self, element: If) -> None:
         pass
-  
+
     @abstractmethod
     def visit_while(self, element: While) -> None:
         pass
@@ -168,7 +170,6 @@ class Visitor(ABC):
     def visit_new_object(self, element: NewObject) -> None:
         pass
 
-
     @abstractmethod
     def visit_not(self, element: Not) -> None:
         pass
@@ -176,8 +177,6 @@ class Visitor(ABC):
     @abstractmethod
     def visit_identifier(self, element: Identifier) -> None:
         pass
-
-
 
 
 class PrettyPrintVisitor(Visitor):
@@ -193,7 +192,7 @@ class PrettyPrintVisitor(Visitor):
         self.iden = self.iden - 1
 
     def get_iden(self) -> str:
-        return  " " * self.iden
+        return " " * self.iden
 
     def visit_program(self, element: Program) -> None:
         element.main_class.accept(self)
@@ -205,7 +204,7 @@ class PrettyPrintVisitor(Visitor):
         print("class", end=' ')
         element.class_name_identifier.accept(self)
         print(" {")
-        print(self.get_iden(),"public static void main (String [] ", end=' ')
+        print(self.get_iden(), "public static void main (String [] ", end=' ')
         element.arg_name_ideintifier.accept(self)
         print(") {")
         print()
@@ -225,18 +224,17 @@ class PrettyPrintVisitor(Visitor):
 
         self.inc_iden()
         for index in range(element.var_decl_list.size()):
-            #print(self.get_iden(), end='')
+            # print(self.get_iden(), end='')
             element.var_decl_list.element_at(index).accept(self)
-            if (index + 1 < element.var_decl_list.size() ): 
+            if (index + 1 < element.var_decl_list.size()):
                 print()
-    
+
         for index in range(element.method_decl_list.size()):
             print()
             element.method_decl_list.element_at(index).accept(self)
         self.dec_iden()
         print()
         print("}")
-
 
     def visit_class_decl_simple(self, element: ClassDeclSimple) -> None:
         print("class", end=' ')
@@ -246,17 +244,16 @@ class PrettyPrintVisitor(Visitor):
         self.inc_iden()
         for index in range(element.var_decl_list.size()):
             element.var_decl_list.element_at(index).accept(self)
-            if (index + 1 < element.var_decl_list.size()): 
+            if (index + 1 < element.var_decl_list.size()):
                 print()
-    
+
         for index in range(element.method_decl_list.size()):
             print()
             element.method_decl_list.element_at(index).accept(self)
-            
+
         self.dec_iden()
         print()
         print("}")
-
 
     def visit_var_decl(self, element: VarDecl) -> None:
         print(self.get_iden(), end='')
@@ -264,7 +261,6 @@ class PrettyPrintVisitor(Visitor):
         print(" ", end='')
         element.name.accept(self)
         print(";")
-     
 
     def visit_method_decl(self, element: MethodDecl) -> None:
         print(self.get_iden(), "public", end=' ')
@@ -275,20 +271,20 @@ class PrettyPrintVisitor(Visitor):
 
         for index in range(element.formal_param_list.size()):
             element.formal_param_list.element_at(index).accept(self)
-            if(index + 1 < element.formal_param_list.size()):
+            if (index + 1 < element.formal_param_list.size()):
                 print(", ", end='')
-        
+
         print(") {")
 
         self.inc_iden()
         for index in range(element.var_decl_list.size()):
-            #print(self.get_iden(), end='')
+            # print(self.get_iden(), end='')
             element.var_decl_list.element_at(index).accept(self)
-        
+
         for index in range(element.statement_list.size()):
-            #print(self.get_iden(), end='')
+            # print(self.get_iden(), end='')
             element.statement_list.element_at(index).accept(self)
-            if(index + 1 < element.statement_list.size()):
+            if (index + 1 < element.statement_list.size()):
                 print()
 
         print(self.get_iden(), "return ", end='')
@@ -297,31 +293,25 @@ class PrettyPrintVisitor(Visitor):
         self.dec_iden()
         print(self.get_iden(), "}")
 
-
     def visit_formal(self, element: Formal) -> None:
         element.type.accept(self)
         print(" ", end='')
         element.name.accept(self)
 
-
     def visit_int_array_type(self, element: IntArrayType) -> None:
         print("int []", end='')
 
-    
     def visit_boolean_type(self, element: BooleanType) -> None:
         print("boolean", end='')
 
-    
     def visit_integer_type(self, element: IntegerType) -> None:
         print("int", end='')
 
-    
     def visit_identifier_type(self, element: IdentifierType) -> None:
         print(element.name, end='')
 
-    
     def visit_block(self, element: Block) -> None:
-        print(self.get_iden(),"{ ")
+        print(self.get_iden(), "{ ")
         self.inc_iden()
         for index in range(element.statement_list.size()):
             print(self.get_iden(), end='')
@@ -343,22 +333,19 @@ class PrettyPrintVisitor(Visitor):
         self.inc_iden()
         element.else_statement.accept(self)
         self.dec_iden()
-  
 
     def visit_while(self, element: While) -> None:
-        print(self.get_iden(),"while (", end='')
+        print(self.get_iden(), "while (", end='')
         element.condition_exp.accept(self)
         print(")")
         self.inc_iden()
         element.statement.accept(self)
         self.dec_iden()
 
-    
     def visit_print(self, element: Print) -> None:
         print(self.get_iden(), "System.out.println(", end='')
         element.print_exp.accept(self)
         print(");", end='')
-
 
     def visit_assign(self, element: Assign) -> None:
         print(self.get_iden(), end='')
@@ -367,7 +354,6 @@ class PrettyPrintVisitor(Visitor):
         element.right_side.accept(self)
         print(";", end='')
 
-    
     def visit_array_assign(self, element: ArrayAssign) -> None:
         print(self.get_iden(), end='')
         element.array_name.accept(self)
@@ -377,7 +363,6 @@ class PrettyPrintVisitor(Visitor):
         element.right_side.accept(self)
         print(";", end='')
 
-    
     def visit_and(self, element: And) -> None:
         print("(", end='')
         element.left_side.accept(self)
@@ -392,14 +377,12 @@ class PrettyPrintVisitor(Visitor):
         element.right_side.accept(self)
         print(")", end='')
 
-
     def visit_plus(self, element: Plus) -> None:
         print("(", end='')
         element.left_side.accept(self)
         print(" + ", end='')
         element.right_side.accept(self)
         print(")", end='')
-
 
     def visit_minus(self, element: Minus) -> None:
         print("(", end='')
@@ -408,14 +391,12 @@ class PrettyPrintVisitor(Visitor):
         element.right_side.accept(self)
         print(")", end='')
 
-    
     def visit_times(self, element: Times) -> None:
         print("(", end='')
         element.left_side.accept(self)
         print(" * ", end='')
         element.right_side.accept(self)
         print(")", end='')
-
 
     def visit_array_lookup(self, element: ArrayLookup) -> None:
         element.out_side_exp.accept(self)
@@ -427,7 +408,6 @@ class PrettyPrintVisitor(Visitor):
         element.length_exp.accept(self)
         print(".length", end='')
 
-
     def visit_call(self, element: Call) -> None:
         element.callee_exp.accept(self)
         print(".", end='')
@@ -435,22 +415,18 @@ class PrettyPrintVisitor(Visitor):
         print("(", end='')
         for index in range(element.arg_list.size()):
             element.arg_list.element_at(index).accept(self)
-            if( index + 1 < element.arg_list.size()):
+            if (index + 1 < element.arg_list.size()):
                 print(", ", end='')
         print(")", end='')
-
 
     def visit_integer_literal(self, element: IntegerLiteral) -> None:
         print(element.value, end='')
 
-
     def visit_true_exp(self, element: TrueExp) -> None:
         print("true", end='')
 
-
     def visit_false_exp(self, element: FalseExp) -> None:
         print("false", end='')
-
 
     def visit_identifier_exp(self, element: IdentifierExp) -> None:
         print(element.name, end='')
@@ -459,25 +435,21 @@ class PrettyPrintVisitor(Visitor):
         print("this", end='')
 
     def visit_new_array(self, element: NewArray) -> None:
-        print("new int[", end='') 
+        print("new int[", end='')
         element.new_exp.accept(self)
         print("]", end='')
-
 
     def visit_new_object(self, element: NewObject) -> None:
         print("new ", end='')
         element.object_name.accept(self)
         print("()", end='')
 
-
     def visit_not(self, element: Not) -> None:
         print("!", end='')
         element.negated_exp.accept(self)
 
-
     def visit_identifier(self, element: Identifier) -> None:
         print(element.name, end='')
-    
 
 
 class DepthFirstVisitor(Visitor):
@@ -497,25 +469,22 @@ class DepthFirstVisitor(Visitor):
         element.super_class_name.accept(self)
         for index in range(element.var_decl_list.size()):
             element.var_decl_list.element_at(index).accept(self)
-    
+
         for index in range(element.method_decl_list.size()):
             element.method_decl_list.element_at(index).accept(self)
-
 
     def visit_class_decl_simple(self, element: ClassDeclSimple) -> None:
         element.class_name.accept(self)
 
         for index in range(element.var_decl_list.size()):
             element.var_decl_list.element_at(index).accept(self)
-    
+
         for index in range(element.method_decl_list.size()):
             element.method_decl_list.element_at(index).accept(self)
-
 
     def visit_var_decl(self, element: VarDecl) -> None:
         element.type.accept(self)
         element.name.accept(self)
-     
 
     def visit_method_decl(self, element: MethodDecl) -> None:
         element.type.accept(self)
@@ -532,25 +501,22 @@ class DepthFirstVisitor(Visitor):
 
         element.return_exp.accept(self)
 
-
     def visit_formal(self, element: Formal) -> None:
         element.type.accept(self)
         element.type.accept(self)
 
-
     def visit_int_array_type(self, element: IntArrayType) -> None:
         return None
-    
+
     def visit_boolean_type(self, element: BooleanType) -> None:
         return None
-    
+
     def visit_integer_type(self, element: IntegerType) -> None:
         return None
 
     def visit_identifier_type(self, element: IdentifierType) -> None:
         return None
 
-    
     def visit_block(self, element: Block) -> None:
         for index in range(element.statement_list.size()):
             element.statement_list.element_at(index).accept(self)
@@ -559,13 +525,11 @@ class DepthFirstVisitor(Visitor):
         element.condition_exp.accept(self)
         element.if_statement.accept(self)
         element.else_statement.accept(self)
-  
 
     def visit_while(self, element: While) -> None:
         element.condition_exp.accept(self)
         element.statement.accept(self)
 
-    
     def visit_print(self, element: Print) -> None:
         element.print_exp.accept(self)
 
@@ -573,13 +537,11 @@ class DepthFirstVisitor(Visitor):
         element.left_side.accept(self)
         element.right_side.accept(self)
 
-    
     def visit_array_assign(self, element: ArrayAssign) -> None:
         element.array_name.accept(self)
         element.array_exp.accept(self)
         element.right_side.accept(self)
 
-    
     def visit_and(self, element: And) -> None:
         element.left_side.accept(self)
         element.right_side.accept(self)
@@ -588,21 +550,17 @@ class DepthFirstVisitor(Visitor):
         element.left_side.accept(self)
         element.right_side.accept(self)
 
-
     def visit_plus(self, element: Plus) -> None:
         element.left_side.accept(self)
         element.right_side.accept(self)
-
 
     def visit_minus(self, element: Minus) -> None:
         element.left_side.accept(self)
         element.right_side.accept(self)
 
-    
     def visit_times(self, element: Times) -> None:
         element.left_side.accept(self)
         element.right_side.accept(self)
-
 
     def visit_array_lookup(self, element: ArrayLookup) -> None:
         element.out_side_exp.accept(self)
@@ -611,26 +569,20 @@ class DepthFirstVisitor(Visitor):
     def visit_array_length(self, element: ArrayLength) -> None:
         element.length_exp.accept(self)
 
-
-
     def visit_call(self, element: Call) -> None:
         element.callee_exp.accept(self)
         element.callee_name.accept(self)
         for index in range(element.arg_list.size()):
             element.arg_list.element_at(index).accept(self)
 
-
     def visit_integer_literal(self, element: IntegerLiteral) -> None:
         return None
-
 
     def visit_true_exp(self, element: TrueExp) -> None:
         return None
 
-
     def visit_false_exp(self, element: FalseExp) -> None:
         return None
-
 
     def visit_identifier_exp(self, element: IdentifierExp) -> None:
         return None
@@ -641,20 +593,17 @@ class DepthFirstVisitor(Visitor):
     def visit_new_array(self, element: NewArray) -> None:
         element.new_exp.accept(self)
 
-
     def visit_new_object(self, element: NewObject) -> None:
         element.object_name.accept(self)
 
-
     def visit_not(self, element: Not) -> None:
         element.negated_exp.accept(self)
-
 
     def visit_identifier(self, element: Identifier) -> None:
         return None
 
 
-#TODO
+# TODO
 class FillSymbolTableVisitor(Visitor):
     def __init__(self) -> None:
         super().__init__()
@@ -667,56 +616,104 @@ class FillSymbolTableVisitor(Visitor):
             self.semantic_errors[error_type.name] = 0
 
     def fill_semantic_errors(self, semantic_errors) -> None:
-            self.semantic_errors = semantic_errors
+        self.semantic_errors = semantic_errors
 
     def add_semantic_error(self, error_type: SemanticErrorType) -> None:
-            self.semantic_errors[error_type.name] += 1
+        self.semantic_errors[error_type.name] += 1
 
     def get_symbol_table(self) -> SymbolTable:
         return self.symbol_table
 
     def visit_program(self, element: Program) -> None:
-        pass
+        element.main_class.accept(self)
+        for elementclassdecl in element.class_decl_list.get_elements:
+            elementclassdecl.accept(self)
 
     def visit_main_class(self, element: MainClass) -> None:
-        pass
+        entry = ClassEntry()
+        self.symbol_table.add_scope(element.class_name_identifier.name, entry)
+        element.class_name_identifier.accept(self)
+        element.arg_name_ideintifier.accept(self)
+        element.statement.accept(self)
 
     def visit_class_decl_extends(self, element: ClassDeclExtends) -> None:
-        pass
+        if (self.symbol_table.add_scope(element.super_class_name.name, ClassEntry(element.super_class_name.name))):
+            if (self.symbol_table.add_scope(element.class_name.name, ClassEntry(element.class_name.name))):
+                self.symbol_table.add_extends_entry(element.class_name.name, element.super_class_name.name)
+                element.class_name.accept(self)
+                element.super_class_name.accept(self)
+
+                for variable in element.var_decl_list.get_elements():
+                    variable.accept(self)
+
+                for method in element.method_decl_list.get_elements():
+                    method.accept(self)
+
+            else:
+                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_CLASS)
+        else:
+            self.add_semantic_error(SemanticErrorType.UNDECLARED_SUPER_CLASS)
 
     def visit_class_decl_simple(self, element: ClassDeclSimple) -> None:
-        pass
+        if (self.symbol_table.add_scope(element.class_name.name, ClassEntry(element.class_name.name))):
+            element.class_name.accept(self)
+            element.super_class_name.accept(self)
+
+            for variable in element.var_decl_list.get_elements():
+                variable.accept(self)
+
+            for method in element.method_decl_list.get_elements():
+                method.accept(self)
+        else:
+            self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_CLASS)
 
     def visit_var_decl(self, element: VarDecl) -> None:
-        pass
-     
+        state = None
+        if (self.symbol_table.curr_method):
+            state = self.symbol_table.add_local(element.name.name)
+        else:
+            state = self.symbol_table.add_field(element.name.name)
+        if (not state):
+            self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_VAR)
+
+        element.type.accept(self)
+        element.type.accept(self)
 
     def visit_method_decl(self, element: MethodDecl) -> None:
-        pass
+        if (self.symbol_table.add_method(element.name.name, MethodEntry(element.type))):
+            element.type.accept(self)
+            element.name.accept(self)
+            element.return_exp.accept(self)
+            for formal in element.formal_param_list.get_elements():
+                formal.accept(self)
+            for variable in element.var_decl_list.get_elements():
+                variable.accept(self)
+            for i in range(element.statement_list.size):
+                element.statement_list.element_at(i).accept(self)
+        else:
+            self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_METHOD)
 
     def visit_formal(self, element: Formal) -> None:
         pass
 
-
     def visit_int_array_type(self, element: IntArrayType) -> None:
         pass
-    
+
     def visit_boolean_type(self, element: BooleanType) -> None:
         pass
-    
+
     def visit_integer_type(self, element: IntegerType) -> None:
         pass
 
     def visit_identifier_type(self, element: IdentifierType) -> None:
         pass
 
-    
     def visit_block(self, element: Block) -> None:
         pass
 
     def visit_if(self, element: If) -> None:
         pass
-  
+
     def visit_while(self, element: While) -> None:
         pass
 
@@ -729,7 +726,6 @@ class FillSymbolTableVisitor(Visitor):
     def visit_array_assign(self, element: ArrayAssign) -> None:
         pass
 
-    
     def visit_and(self, element: And) -> None:
         pass
 
@@ -780,9 +776,6 @@ class FillSymbolTableVisitor(Visitor):
 
     def visit_identifier(self, element: Identifier) -> None:
         pass
-
-
-
 
 
 ########################################
@@ -809,7 +802,7 @@ class TypeVisitor(ABC):
     @abstractmethod
     def visit_var_decl(self, element: VarDecl) -> Type:
         pass
-  
+
     @abstractmethod
     def visit_method_decl(self, element: MethodDecl) -> Type:
         pass
@@ -841,7 +834,7 @@ class TypeVisitor(ABC):
     @abstractmethod
     def visit_if(self, element: If) -> Type:
         pass
-  
+
     @abstractmethod
     def visit_while(self, element: While) -> Type:
         pass
@@ -918,7 +911,6 @@ class TypeVisitor(ABC):
     def visit_new_object(self, element: NewObject) -> Type:
         pass
 
-
     @abstractmethod
     def visit_not(self, element: Not) -> Type:
         pass
@@ -926,7 +918,6 @@ class TypeVisitor(ABC):
     @abstractmethod
     def visit_identifier(self, element: Identifier) -> Type:
         pass
-
 
 
 class TypeDepthFirstVisitor(TypeVisitor):
@@ -948,28 +939,27 @@ class TypeDepthFirstVisitor(TypeVisitor):
         element.super_class_name.accept_type(self)
         for index in range(element.var_decl_list.size()):
             element.var_decl_list.element_at(index).accept_type(self)
-    
+
         for index in range(element.method_decl_list.size()):
             element.method_decl_list.element_at(index).accept_type(self)
 
-        return None    
+        return None
 
     def visit_class_decl_simple(self, element: ClassDeclSimple) -> Type:
         element.class_name.accept_type(self)
 
         for index in range(element.var_decl_list.size()):
             element.var_decl_list.element_at(index).accept_type(self)
-    
+
         for index in range(element.method_decl_list.size()):
             element.method_decl_list.element_at(index).accept_type(self)
-        
+
         return None
 
     def visit_var_decl(self, element: VarDecl) -> Type:
         element.type.accept_type(self)
         element.name.accept_type(self)
         return None
-     
 
     def visit_method_decl(self, element: MethodDecl) -> Type:
         element.type.accept_type(self)
@@ -987,31 +977,27 @@ class TypeDepthFirstVisitor(TypeVisitor):
         element.return_exp.accept_type(self)
         return None
 
-
     def visit_formal(self, element: Formal) -> Type:
         element.type.accept_type(self)
         element.type.accept_type(self)
         return None
 
-
     def visit_int_array_type(self, element: IntArrayType) -> Type:
         return None
-    
+
     def visit_boolean_type(self, element: BooleanType) -> Type:
         return None
-    
+
     def visit_integer_type(self, element: IntegerType) -> Type:
         return None
 
-    
     def visit_identifier_type(self, element: IdentifierType) -> Type:
         return None
 
-    
     def visit_block(self, element: Block) -> Type:
         for index in range(element.statement_list.size()):
             element.statement_list.element_at(index).accept_type(self)
-        
+
         return None
 
     def visit_if(self, element: If) -> Type:
@@ -1019,32 +1005,27 @@ class TypeDepthFirstVisitor(TypeVisitor):
         element.if_statement.accept_type(self)
         element.else_statement.accept_type(self)
         return None
-  
 
     def visit_while(self, element: While) -> Type:
         element.condition_exp.accept_type(self)
         element.statement.accept_type(self)
         return None
 
-    
     def visit_print(self, element: Print) -> Type:
         element.print_exp.accept_type(self)
         return None
-
 
     def visit_assign(self, element: Assign) -> Type:
         element.left_side.accept_type(self)
         element.right_side.accept_type(self)
         return None
 
-    
     def visit_array_assign(self, element: ArrayAssign) -> Type:
         element.array_name.accept_type(self)
         element.array_exp.accept_type(self)
         element.right_side.accept_type(self)
         return None
 
-    
     def visit_and(self, element: And) -> Type:
         element.left_side.accept_type(self)
         element.right_side.accept_type(self)
@@ -1055,24 +1036,20 @@ class TypeDepthFirstVisitor(TypeVisitor):
         element.right_side.accept_type(self)
         return None
 
-
     def visit_plus(self, element: Plus) -> Type:
         element.left_side.accept_type(self)
         element.right_side.accept_type(self)
         return None
-
 
     def visit_minus(self, element: Minus) -> Type:
         element.left_side.accept_type(self)
         element.right_side.accept_type(self)
         return None
 
-    
     def visit_times(self, element: Times) -> Type:
         element.left_side.accept_type(self)
         element.right_side.accept_type(self)
         return None
-
 
     def visit_array_lookup(self, element: ArrayLookup) -> Type:
         element.out_side_exp.accept_type(self)
@@ -1083,7 +1060,6 @@ class TypeDepthFirstVisitor(TypeVisitor):
         element.length_exp.accept_type(self)
         return None
 
-
     def visit_call(self, element: Call) -> Type:
         element.callee_exp.accept_type(self)
         element.callee_name.accept_type(self)
@@ -1091,49 +1067,39 @@ class TypeDepthFirstVisitor(TypeVisitor):
             element.arg_list.element_at(index).accept_type(self)
         return None
 
-
     def visit_integer_literal(self, element: IntegerLiteral) -> Type:
         return None
-
 
     def visit_true_exp(self, element: TrueExp) -> Type:
         return None
 
-
     def visit_false_exp(self, element: FalseExp) -> Type:
         return None
-
 
     def visit_identifier_exp(self, element: IdentifierExp) -> Type:
         return None
 
-
     def visit_this(self, element: This) -> Type:
         return None
-
 
     def visit_new_array(self, element: NewArray) -> Type:
         element.new_exp.accept_type(self)
         return None
 
-
     def visit_new_object(self, element: NewObject) -> Type:
         element.object_name.accept_type(self)
         return None
-
 
     def visit_not(self, element: Not) -> Type:
         element.negated_exp.accept_type(self)
         return None
 
-
     def visit_identifier(self, element: Identifier) -> Type:
         return None
 
 
-
-#TODO
-class TypeCheckingVisitor(TypeVisitor): 
+# TODO
+class TypeCheckingVisitor(TypeVisitor):
     def __init__(self) -> None:
         super().__init__()
         self.semantic_errors = {}
@@ -1144,10 +1110,10 @@ class TypeCheckingVisitor(TypeVisitor):
             self.semantic_errors[error_type.name] = 0
 
     def fill_semantic_errors(self, semantic_errors) -> None:
-            self.semantic_errors = semantic_errors
+        self.semantic_errors = semantic_errors
 
     def add_semantic_error(self, error_type: SemanticErrorType) -> None:
-            self.semantic_errors[error_type.name] += 1
+        self.semantic_errors[error_type.name] += 1
 
     def set_symbol_table(self, symbol_table: SymbolTable):
         self.symbol_table = symbol_table
@@ -1178,16 +1144,16 @@ class TypeCheckingVisitor(TypeVisitor):
 
     def visit_int_array_type(self, element: IntArrayType) -> Type:
         pass
-    
+
     def visit_boolean_type(self, element: BooleanType) -> Type:
         pass
-    
+
     def visit_integer_type(self, element: IntegerType) -> Type:
         pass
 
     def visit_identifier_type(self, element: IdentifierType) -> Type:
         pass
-    
+
     def visit_block(self, element: Block) -> Type:
         pass
 
@@ -1196,16 +1162,16 @@ class TypeCheckingVisitor(TypeVisitor):
 
     def visit_while(self, element: While) -> Type:
         pass
-    
+
     def visit_print(self, element: Print) -> Type:
         pass
 
     def visit_assign(self, element: Assign) -> Type:
         pass
-    
+
     def visit_array_assign(self, element: ArrayAssign) -> Type:
         pass
-    
+
     def visit_and(self, element: And) -> Type:
         pass
 
@@ -1217,7 +1183,7 @@ class TypeCheckingVisitor(TypeVisitor):
 
     def visit_minus(self, element: Minus) -> Type:
         pass
-    
+
     def visit_times(self, element: Times) -> Type:
         pass
 
