@@ -98,7 +98,7 @@ class ClassEntry():
         return self.methods
 
     def get_method(self, id: str) -> MethodEntry:
-        return self.methods[Symbol.symbol(id).to_string()]    
+        return self.methods.get(Symbol.symbol(id).to_string())    
     
     def add_var(self, id : str, type: Type) -> bool:
         if(self.contains_field(Symbol.symbol(id).to_string())):
@@ -147,7 +147,7 @@ class SymbolTable():
         self.curr_method_name = None
 
     def set_curr_method(self, id: str):
-        self.curr_method = self.curr_class.get_methods()[Symbol.symbol(id).to_string()]
+        self.curr_method = self.curr_class.get_method(id)
         self.curr_method_name = id
 
     def add_scope(self, id: str, entry: ClassEntry) -> bool:

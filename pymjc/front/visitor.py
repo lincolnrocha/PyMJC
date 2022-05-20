@@ -4,7 +4,6 @@ import enum
 
 from pymjc.front.ast import *
 from pymjc.front.symbol import *
-from pymjc.log import MJLogger
 
 class SemanticErrorType(enum.Enum):
     ALREADY_DECLARED_CLASS = 1
@@ -677,12 +676,11 @@ class FillSymbolTableVisitor(Visitor):
         return self.symbol_table
 
     def visit_program(self, element: Program) -> None:
-        self.symbol_table.add_scope(element.main_class.class_name_identifier, ClassEntry())
+        self.symbol_table.add_scope(element.main_class.class_name_identifier.name, ClassEntry())
         for index in range(element.class_decl_list.size()):
             class_decl = element.class_decl_list.element_at(index)
             if not self.symbol_table.add_scope(class_decl.class_name.name, ClassEntry()) :
                 self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_CLASS)
-                MJLogger.semantic_log(self.src_file_name, class_decl.name.name, SemanticErrorType.ALREADY_DECLARED_CLASS, "Classe Duplicado")
 
         element.main_class.accept(self)
         for index in range(element.class_decl_list.size()):
@@ -690,20 +688,32 @@ class FillSymbolTableVisitor(Visitor):
 
     def visit_main_class(self, element: MainClass) -> None:
         self.symbol_table.set_curr_class(element.class_name_identifier.name)
-        self.symbol_table.add_method("main", MethodEntry())
+        self.symbol_table.add_method("main", MethodEntry(IntegerType()))
         self.symbol_table.add_param(element.arg_name_ideintifier.name, IntArrayType())
         element.class_name_identifier.accept(self)
         element.arg_name_ideintifier.accept(self)
         element.statement.accept(self)
 
     def visit_class_decl_extends(self, element: ClassDeclExtends) -> None:
+        self.symbol_table.set_curr_class(element.class_name.name)
         element.class_name.accept(self)
+
+        if not self.symbol_table.contains_key(element.super_class_name.name):
+            self.add_semantic_error(SemanticErrorType.UNDECLARED_CLASS)
+            
         element.super_class_name.accept(self)
+        
         for index in range(element.var_decl_list.size()):
-            element.var_decl_list.element_at(index).accept(self)
-    
+            var_decl = element.var_decl_list.element_at(index)
+            if not self.symbol_table.add_field(var_decl.name.name, var_decl.type):
+                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_VAR)
+            var_decl.accept(self)
+
         for index in range(element.method_decl_list.size()):
-            element.method_decl_list.element_at(index).accept(self)
+            method_decl = element.method_decl_list.element_at(index)
+            if not self.symbol_table.add_method(method_decl.name.name, MethodEntry(method_decl.type)):
+                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_METHOD)
+            method_decl.accept(self)
 
 
     def visit_class_decl_simple(self, element: ClassDeclSimple) -> None:
@@ -714,14 +724,12 @@ class FillSymbolTableVisitor(Visitor):
             var_decl = element.var_decl_list.element_at(index)
             if not self.symbol_table.add_field(var_decl.name.name, var_decl.type):
                 self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_VAR)
-                MJLogger.semantic_log(self.src_file_name, var_decl.name.name, SemanticErrorType.ALREADY_DECLARED_VAR, "Atributo Duplicado") 
             var_decl.accept(self)
 
         for index in range(element.method_decl_list.size()):
             method_decl = element.method_decl_list.element_at(index)
-            if not self.symbol_table.add_method(method_decl.name, MethodEntry()):
+            if not self.symbol_table.add_method(method_decl.name.name, MethodEntry(method_decl.type)):
                 self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_METHOD)
-                MJLogger.semantic_log(self.src_file_name, method_decl.name.name, SemanticErrorType.ALREADY_DECLARED_METHOD, "Método Duplicado")                
             method_decl.accept(self)
 
 
@@ -745,7 +753,6 @@ class FillSymbolTableVisitor(Visitor):
             var_decl = element.var_decl_list.element_at(index)
             if not self.symbol_table.add_local(var_decl.name.name, var_decl.type):
                 self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_VAR)
-                MJLogger.semantic_log(self.src_file_name, var_decl.name.name, SemanticErrorType.ALREADY_DECLARED_VAR, "Variavel Local Duplicada")
             var_decl.accept(self)
 
         for index in range(element.statement_list.size()):
