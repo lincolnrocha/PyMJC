@@ -4,6 +4,7 @@ import enum
 
 from pymjc.front.ast import *
 from pymjc.front.symbol import *
+from pymjc.log import MJLogger
 
 class SemanticErrorType(enum.Enum):
     ALREADY_DECLARED_CLASS = 1
@@ -676,110 +677,202 @@ class FillSymbolTableVisitor(Visitor):
         return self.symbol_table
 
     def visit_program(self, element: Program) -> None:
-        pass
+        self.symbol_table.add_scope(element.main_class.class_name_identifier, ClassEntry())
+        for index in range(element.class_decl_list.size()):
+            class_decl = element.class_decl_list.element_at(index)
+            if not self.symbol_table.add_scope(class_decl.class_name.name, ClassEntry()) :
+                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_CLASS)
+                MJLogger.semantic_log(self.src_file_name, class_decl.name.name, SemanticErrorType.ALREADY_DECLARED_CLASS, "Classe Duplicado")
+
+        element.main_class.accept(self)
+        for index in range(element.class_decl_list.size()):
+            element.class_decl_list.element_at(index).accept(self)
 
     def visit_main_class(self, element: MainClass) -> None:
-        pass
+        self.symbol_table.set_curr_class(element.class_name_identifier.name)
+        self.symbol_table.add_method("main", MethodEntry())
+        self.symbol_table.add_param(element.arg_name_ideintifier.name, IntArrayType())
+        element.class_name_identifier.accept(self)
+        element.arg_name_ideintifier.accept(self)
+        element.statement.accept(self)
 
     def visit_class_decl_extends(self, element: ClassDeclExtends) -> None:
-        pass
+        element.class_name.accept(self)
+        element.super_class_name.accept(self)
+        for index in range(element.var_decl_list.size()):
+            element.var_decl_list.element_at(index).accept(self)
+    
+        for index in range(element.method_decl_list.size()):
+            element.method_decl_list.element_at(index).accept(self)
+
 
     def visit_class_decl_simple(self, element: ClassDeclSimple) -> None:
-        pass
+        self.symbol_table.set_curr_class(element.class_name.name)
+        element.class_name.accept(self)
+
+        for index in range(element.var_decl_list.size()):
+            var_decl = element.var_decl_list.element_at(index)
+            if not self.symbol_table.add_field(var_decl.name.name, var_decl.type):
+                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_VAR)
+                MJLogger.semantic_log(self.src_file_name, var_decl.name.name, SemanticErrorType.ALREADY_DECLARED_VAR, "Atributo Duplicado") 
+            var_decl.accept(self)
+
+        for index in range(element.method_decl_list.size()):
+            method_decl = element.method_decl_list.element_at(index)
+            if not self.symbol_table.add_method(method_decl.name, MethodEntry()):
+                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_METHOD)
+                MJLogger.semantic_log(self.src_file_name, method_decl.name.name, SemanticErrorType.ALREADY_DECLARED_METHOD, "Método Duplicado")                
+            method_decl.accept(self)
+
 
     def visit_var_decl(self, element: VarDecl) -> None:
-        pass
+        element.type.accept(self)
+        element.name.accept(self)
      
 
     def visit_method_decl(self, element: MethodDecl) -> None:
-        pass
+        self.symbol_table.set_curr_method(element.name.name)
+        element.type.accept(self)
+        element.name.accept(self)
+
+        for index in range(element.formal_param_list.size()):
+            formal_param = element.formal_param_list.element_at(index)
+            if not self.symbol_table.add_param(formal_param.name.name, formal_param.type):
+                self.add_semantic_error(SemanticErrorType.DUPLICATED_ARG)
+            formal_param.accept(self)
+
+        for index in range(element.var_decl_list.size()):
+            var_decl = element.var_decl_list.element_at(index)
+            if not self.symbol_table.add_local(var_decl.name.name, var_decl.type):
+                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_VAR)
+                MJLogger.semantic_log(self.src_file_name, var_decl.name.name, SemanticErrorType.ALREADY_DECLARED_VAR, "Variavel Local Duplicada")
+            var_decl.accept(self)
+
+        for index in range(element.statement_list.size()):
+            element.statement_list.element_at(index).accept(self)
+
+        element.return_exp.accept(self)
+
 
     def visit_formal(self, element: Formal) -> None:
-        pass
+        element.type.accept(self)
+        element.type.accept(self)
 
 
     def visit_int_array_type(self, element: IntArrayType) -> None:
-        pass
+        return None
     
     def visit_boolean_type(self, element: BooleanType) -> None:
-        pass
+        return None
     
     def visit_integer_type(self, element: IntegerType) -> None:
-        pass
+        return None
 
     def visit_identifier_type(self, element: IdentifierType) -> None:
-        pass
+        return None
 
     
     def visit_block(self, element: Block) -> None:
-        pass
+        for index in range(element.statement_list.size()):
+            element.statement_list.element_at(index).accept(self)
 
     def visit_if(self, element: If) -> None:
-        pass
+        element.condition_exp.accept(self)
+        element.if_statement.accept(self)
+        element.else_statement.accept(self)
   
-    def visit_while(self, element: While) -> None:
-        pass
 
+    def visit_while(self, element: While) -> None:
+        element.condition_exp.accept(self)
+        element.statement.accept(self)
+
+    
     def visit_print(self, element: Print) -> None:
-        pass
+        element.print_exp.accept(self)
 
     def visit_assign(self, element: Assign) -> None:
-        pass
+        element.left_side.accept(self)
+        element.right_side.accept(self)
 
+    
     def visit_array_assign(self, element: ArrayAssign) -> None:
-        pass
+        element.array_name.accept(self)
+        element.array_exp.accept(self)
+        element.right_side.accept(self)
 
     
     def visit_and(self, element: And) -> None:
-        pass
+        element.left_side.accept(self)
+        element.right_side.accept(self)
 
     def visit_less_than(self, element: LessThan) -> None:
-        pass
+        element.left_side.accept(self)
+        element.right_side.accept(self)
+
 
     def visit_plus(self, element: Plus) -> None:
-        pass
+        element.left_side.accept(self)
+        element.right_side.accept(self)
+
 
     def visit_minus(self, element: Minus) -> None:
-        pass
+        element.left_side.accept(self)
+        element.right_side.accept(self)
 
+    
     def visit_times(self, element: Times) -> None:
-        pass
+        element.left_side.accept(self)
+        element.right_side.accept(self)
+
 
     def visit_array_lookup(self, element: ArrayLookup) -> None:
-        pass
+        element.out_side_exp.accept(self)
+        element.in_side_exp.accept(self)
 
     def visit_array_length(self, element: ArrayLength) -> None:
-        pass
+        element.length_exp.accept(self)
+
+
 
     def visit_call(self, element: Call) -> None:
-        pass
+        element.callee_exp.accept(self)
+        element.callee_name.accept(self)
+        for index in range(element.arg_list.size()):
+            element.arg_list.element_at(index).accept(self)
+
 
     def visit_integer_literal(self, element: IntegerLiteral) -> None:
-        pass
+        return None
+
 
     def visit_true_exp(self, element: TrueExp) -> None:
-        pass
+        return None
+
 
     def visit_false_exp(self, element: FalseExp) -> None:
-        pass
+        return None
+
 
     def visit_identifier_exp(self, element: IdentifierExp) -> None:
-        pass
+        return None
 
     def visit_this(self, element: This) -> None:
-        pass
+        return None
 
     def visit_new_array(self, element: NewArray) -> None:
-        pass
+        element.new_exp.accept(self)
+
 
     def visit_new_object(self, element: NewObject) -> None:
-        pass
+        element.object_name.accept(self)
+
 
     def visit_not(self, element: Not) -> None:
-        pass
+        element.negated_exp.accept(self)
+
 
     def visit_identifier(self, element: Identifier) -> None:
-        pass
+        return None
 
 
 
