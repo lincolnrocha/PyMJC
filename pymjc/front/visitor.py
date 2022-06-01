@@ -679,20 +679,30 @@ class FillSymbolTableVisitor(Visitor):
         self.symbol_table.add_scope(element.main_class.class_name_identifier.name, ClassEntry())
         for index in range(element.class_decl_list.size()):
             class_decl = element.class_decl_list.element_at(index)
-            if not self.symbol_table.add_scope(class_decl.class_name.name, ClassEntry()) :
+            
+            class_entry = None
+            
+            if isinstance(class_decl, ClassDeclExtends):
+                class_entry = ClassEntry(class_decl.super_class_name.name)
+            else:
+                class_entry = ClassEntry()
+
+            if not self.symbol_table.add_scope(class_decl.class_name.name, class_entry) :
                 self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_CLASS)
 
         element.main_class.accept(self)
         for index in range(element.class_decl_list.size()):
             element.class_decl_list.element_at(index).accept(self)
 
+
     def visit_main_class(self, element: MainClass) -> None:
         self.symbol_table.set_curr_class(element.class_name_identifier.name)
-        self.symbol_table.add_method("main", MethodEntry(IntegerType()))
-        self.symbol_table.add_param(element.arg_name_ideintifier.name, IntArrayType())
         element.class_name_identifier.accept(self)
+        self.symbol_table.add_method("main", MethodEntry(None))
         element.arg_name_ideintifier.accept(self)
+        self.symbol_table.add_param(element.arg_name_ideintifier.name, None)
         element.statement.accept(self)
+        return None
 
     def visit_class_decl_extends(self, element: ClassDeclExtends) -> None:
         self.symbol_table.set_curr_class(element.class_name.name)
