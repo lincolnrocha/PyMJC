@@ -75,6 +75,12 @@ class SemanticTest(unittest.TestCase):
             expected = self.test_suite_oracles[test_file_name]["number_of_ALREADY_DECLARED_METHOD"]
             self.assertEqual(actual, expected, test_file_name)
 
+    def test_number_of_already_declared_field(self):
+        for test_file_name in self.test_suite_oracles:
+            actual = self.actual_values[test_file_name]["number_of_ALREADY_DECLARED_FIELD"]
+            expected = self.test_suite_oracles[test_file_name]["number_of_ALREADY_DECLARED_FIELD"]
+            self.assertEqual(actual, expected, test_file_name)
+
     def test_number_of_already_declared_var(self):
         for test_file_name in self.test_suite_oracles:
             actual = self.actual_values[test_file_name]["number_of_ALREADY_DECLARED_VAR"]

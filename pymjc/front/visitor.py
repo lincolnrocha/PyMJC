@@ -3,182 +3,44 @@ from abc import ABC, abstractmethod
 import enum
 
 from pymjc.front.ast import *
+from pymjc.front.visitortypes import *
 from pymjc.front.symbol import *
+from pymjc.log import MJLogger
 
 class SemanticErrorType(enum.Enum):
     ALREADY_DECLARED_CLASS = 1
     ALREADY_DECLARED_METHOD = 2
-    ALREADY_DECLARED_VAR = 3
-    AND_TYPE_MISMATCH = 4
-    ARG_TYPE_MISMATCH = 5
-    ARRAY_ASSIGN_TYPE_MISMATCH = 6
-    ARRAY_LENGTH_TYPE_MISMATCH = 7
-    ARRAY_TYPE_MISMATCH = 8
-    ASSIGN_TYPE_MISMATCH = 9
-    DUPLICATED_ARG = 10
-    IF_TYPE_MISMATCH = 11
-    INDEX_TYPE_MISMATCH = 12
-    INVALID_OBJECT_IDENTIFIER = 13
-    LESS_THAN_TYPE_MISMATCH = 14
-    MINUS_TYPE_MISMATCH = 15
-    NEW_ARRAY_TYPE_MISMATCH = 16
-    NEW_OBJECT_UNDECLARED_CLASS = 17
-    NOT_TYPE_MISMATCH = 18
-    PLUS_TYPE_MISMATCH = 19
-    RETURN_TYPE_MISMATCH = 20
-    TIMES_TYPE_MISMATCH = 21
-    UNDECLARED_CLASS = 22
-    UNDECLARED_IDENTIFIER = 23
-    UNDECLARED_METHOD = 24
-    UNDECLARED_SUPER_CLASS = 25 
-    WHILE_TYPE_MISMATCH = 26
-    WRONG_ARG_NUMBER = 27
+    ALREADY_DECLARED_FIELD = 3
+    ALREADY_DECLARED_VAR = 4
+    AND_TYPE_MISMATCH = 5
+    ARG_TYPE_MISMATCH = 6
+    ARRAY_ASSIGN_TYPE_MISMATCH = 7
+    ARRAY_LENGTH_TYPE_MISMATCH = 8
+    ARRAY_TYPE_MISMATCH = 9
+    ASSIGN_TYPE_MISMATCH = 10
+    DUPLICATED_ARG = 11
+    IF_TYPE_MISMATCH = 12
+    INDEX_TYPE_MISMATCH = 13
+    INVALID_OBJECT_IDENTIFIER = 14
+    LESS_THAN_TYPE_MISMATCH = 15
+    MINUS_TYPE_MISMATCH = 16
+    NEW_ARRAY_TYPE_MISMATCH = 17
+    NEW_OBJECT_UNDECLARED_CLASS = 18
+    NOT_TYPE_MISMATCH = 19
+    PLUS_TYPE_MISMATCH = 20
+    RETURN_TYPE_MISMATCH = 21
+    TIMES_TYPE_MISMATCH = 22
+    UNDECLARED_CLASS = 23
+    UNDECLARED_IDENTIFIER = 24
+    UNDECLARED_METHOD = 25
+    UNDECLARED_SUPER_CLASS = 26 
+    WHILE_TYPE_MISMATCH = 27
+    WRONG_ARG_NUMBER = 28
+
 
 ########################################
 # AST Simple Visitors
 ########################################
-
-class Visitor(ABC):
-
-    @abstractmethod
-    def visit_program(self, element: Program) -> None:
-        pass
-
-    @abstractmethod
-    def visit_main_class(self, element: MainClass) -> None:
-        pass
-
-    @abstractmethod
-    def visit_class_decl_extends(self, element: ClassDeclExtends) -> None:
-        pass
-
-    @abstractmethod
-    def visit_class_decl_simple(self, element: ClassDeclSimple) -> None:
-        pass
-
-    @abstractmethod
-    def visit_var_decl(self, element: VarDecl) -> None:
-        pass
-  
-    @abstractmethod
-    def visit_method_decl(self, element: MethodDecl) -> None:
-        pass
-
-    @abstractmethod
-    def visit_formal(self, element: Formal) -> None:
-        pass
-
-    @abstractmethod
-    def visit_int_array_type(self, element: IntArrayType) -> None:
-        pass
-
-    @abstractmethod
-    def visit_boolean_type(self, element: BooleanType) -> None:
-        pass
-
-    @abstractmethod
-    def visit_integer_type(self, element: IntegerType) -> None:
-        pass
-
-    @abstractmethod
-    def visit_identifier_type(self, element: IdentifierType) -> None:
-        pass
-
-    @abstractmethod
-    def visit_block(self, element: Block) -> None:
-        pass
-
-    @abstractmethod
-    def visit_if(self, element: If) -> None:
-        pass
-  
-    @abstractmethod
-    def visit_while(self, element: While) -> None:
-        pass
-
-    @abstractmethod
-    def visit_print(self, element: Print) -> None:
-        pass
-
-    @abstractmethod
-    def visit_assign(self, element: Assign) -> None:
-        pass
-
-    @abstractmethod
-    def visit_array_assign(self, element: ArrayAssign) -> None:
-        pass
-
-    @abstractmethod
-    def visit_and(self, element: And) -> None:
-        pass
-
-    @abstractmethod
-    def visit_less_than(self, element: LessThan) -> None:
-        pass
-
-    @abstractmethod
-    def visit_plus(self, element: Plus) -> None:
-        pass
-
-    @abstractmethod
-    def visit_minus(self, element: Minus) -> None:
-        pass
-
-    @abstractmethod
-    def visit_times(self, element: Times) -> None:
-        pass
-
-    @abstractmethod
-    def visit_array_lookup(self, element: ArrayLookup) -> None:
-        pass
-
-    @abstractmethod
-    def visit_array_length(self, element: ArrayLength) -> None:
-        pass
-
-    @abstractmethod
-    def visit_call(self, element: Call) -> None:
-        pass
-
-    @abstractmethod
-    def visit_integer_literal(self, element: IntegerLiteral) -> None:
-        pass
-
-    @abstractmethod
-    def visit_true_exp(self, element: TrueExp) -> None:
-        pass
-
-    @abstractmethod
-    def visit_false_exp(self, element: FalseExp) -> None:
-        pass
-
-    @abstractmethod
-    def visit_identifier_exp(self, element: IdentifierExp) -> None:
-        pass
-
-    @abstractmethod
-    def visit_this(self, element: This) -> None:
-        pass
-
-    @abstractmethod
-    def visit_new_array(self, element: NewArray) -> None:
-        pass
-
-    @abstractmethod
-    def visit_new_object(self, element: NewObject) -> None:
-        pass
-
-
-    @abstractmethod
-    def visit_not(self, element: Not) -> None:
-        pass
-
-    @abstractmethod
-    def visit_identifier(self, element: Identifier) -> None:
-        pass
-
-
-
 
 class PrettyPrintVisitor(Visitor):
 
@@ -203,7 +65,7 @@ class PrettyPrintVisitor(Visitor):
 
     def visit_main_class(self, element: MainClass) -> None:
         print("class", end=' ')
-        element.class_name_identifier.accept(self)
+        element.class_name.accept(self)
         print(" {")
         print(self.get_iden(),"public static void main (String [] ", end=' ')
         element.arg_name_ideintifier.accept(self)
@@ -488,7 +350,7 @@ class DepthFirstVisitor(Visitor):
             element.class_decl_list.element_at(index).accept(self)
 
     def visit_main_class(self, element: MainClass) -> None:
-        element.class_name_identifier.accept(self)
+        element.class_name.accept(self)
         element.arg_name_ideintifier.accept(self)
         element.statement.accept(self)
 
@@ -676,13 +538,13 @@ class FillSymbolTableVisitor(Visitor):
         return self.symbol_table
 
     def visit_program(self, element: Program) -> None:
-        self.symbol_table.add_scope(element.main_class.class_name_identifier.name, ClassEntry())
+        self.symbol_table.add_scope(element.main_class.class_name.name, ClassEntry())
+
         for index in range(element.class_decl_list.size()):
             class_decl = element.class_decl_list.element_at(index)
-            
             class_entry = None
             
-            if isinstance(class_decl, ClassDeclExtends):
+            if hasattr(class_decl, "super_class_name"):
                 class_entry = ClassEntry(class_decl.super_class_name.name)
             else:
                 class_entry = ClassEntry()
@@ -696,10 +558,12 @@ class FillSymbolTableVisitor(Visitor):
 
 
     def visit_main_class(self, element: MainClass) -> None:
-        self.symbol_table.set_curr_class(element.class_name_identifier.name)
-        element.class_name_identifier.accept(self)
+        self.symbol_table.set_curr_class(element.class_name.name)
+        element.class_name.accept(self)
+        #self.symbol_table.add_method("main", MethodEntry(IdentifierType("void")))
         self.symbol_table.add_method("main", MethodEntry(None))
         element.arg_name_ideintifier.accept(self)
+        #self.symbol_table.add_param(element.arg_name_ideintifier.name, IdentifierType("String[]"))
         self.symbol_table.add_param(element.arg_name_ideintifier.name, None)
         element.statement.accept(self)
         return None
@@ -708,72 +572,77 @@ class FillSymbolTableVisitor(Visitor):
         self.symbol_table.set_curr_class(element.class_name.name)
         element.class_name.accept(self)
 
-        if not self.symbol_table.contains_key(element.super_class_name.name):
+        if not self.symbol_table.contains_class(element.super_class_name.name):
             self.add_semantic_error(SemanticErrorType.UNDECLARED_CLASS)
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.UNDECLARED_CLASS.name, element.class_name.name)
             
         element.super_class_name.accept(self)
         
         for index in range(element.var_decl_list.size()):
-            var_decl = element.var_decl_list.element_at(index)
-            if not self.symbol_table.add_field(var_decl.name.name, var_decl.type):
-                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_VAR)
-            var_decl.accept(self)
+            element.var_decl_list.element_at(index).accept(self)
 
         for index in range(element.method_decl_list.size()):
-            method_decl = element.method_decl_list.element_at(index)
-            if not self.symbol_table.add_method(method_decl.name.name, MethodEntry(method_decl.type)):
-                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_METHOD)
-            method_decl.accept(self)
+            element.method_decl_list.element_at(index).accept(self)
 
+        self.symbol_table.add_extends_entry(element.class_name.name, element.super_class_name.name)
+
+        return None
 
     def visit_class_decl_simple(self, element: ClassDeclSimple) -> None:
         self.symbol_table.set_curr_class(element.class_name.name)
         element.class_name.accept(self)
 
         for index in range(element.var_decl_list.size()):
-            var_decl = element.var_decl_list.element_at(index)
-            if not self.symbol_table.add_field(var_decl.name.name, var_decl.type):
-                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_VAR)
-            var_decl.accept(self)
+            element.var_decl_list.element_at(index).accept(self)
+
 
         for index in range(element.method_decl_list.size()):
-            method_decl = element.method_decl_list.element_at(index)
-            if not self.symbol_table.add_method(method_decl.name.name, MethodEntry(method_decl.type)):
-                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_METHOD)
-            method_decl.accept(self)
+            element.method_decl_list.element_at(index).accept(self)
 
 
     def visit_var_decl(self, element: VarDecl) -> None:
         element.type.accept(self)
         element.name.accept(self)
-     
+
+        if(self.symbol_table.curr_method is not None):
+            if not self.symbol_table.add_local(element.name.name, element.type):
+                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_VAR)
+                MJLogger.semantic_log(self.src_file_name, SemanticErrorType.ALREADY_DECLARED_VAR.name, self.symbol_table.curr_method_name + "#" + element.name.name)
+        
+        elif not self.symbol_table.add_field(element.name.name, element.type):
+                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_FIELD)
+                MJLogger.semantic_log(self.src_file_name, SemanticErrorType.ALREADY_DECLARED_FIELD.name, self.symbol_table.curr_class_name + "#" + element.name.name)
+        
+        return None
 
     def visit_method_decl(self, element: MethodDecl) -> None:
-        self.symbol_table.set_curr_method(element.name.name)
         element.type.accept(self)
         element.name.accept(self)
 
+        if not self.symbol_table.add_method(element.name.name, MethodEntry(element.type)):
+            self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_METHOD)
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.ALREADY_DECLARED_METHOD.name, self.symbol_table.curr_class_name + "#" + element.name.name)
+
         for index in range(element.formal_param_list.size()):
-            formal_param = element.formal_param_list.element_at(index)
-            if not self.symbol_table.add_param(formal_param.name.name, formal_param.type):
-                self.add_semantic_error(SemanticErrorType.DUPLICATED_ARG)
-            formal_param.accept(self)
+            element.formal_param_list.element_at(index).accept(self)
 
         for index in range(element.var_decl_list.size()):
-            var_decl = element.var_decl_list.element_at(index)
-            if not self.symbol_table.add_local(var_decl.name.name, var_decl.type):
-                self.add_semantic_error(SemanticErrorType.ALREADY_DECLARED_VAR)
-            var_decl.accept(self)
+            element.var_decl_list.element_at(index).accept(self)
 
         for index in range(element.statement_list.size()):
             element.statement_list.element_at(index).accept(self)
 
         element.return_exp.accept(self)
 
+        return None
+
 
     def visit_formal(self, element: Formal) -> None:
         element.type.accept(self)
         element.type.accept(self)
+        if not self.symbol_table.add_param(element.name.name, element.type):
+            self.add_semantic_error(SemanticErrorType.DUPLICATED_ARG)
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.DUPLICATED_ARG.name, self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name + "#" + element.name.name)            
 
 
     def visit_int_array_type(self, element: IntArrayType) -> None:
@@ -797,57 +666,67 @@ class FillSymbolTableVisitor(Visitor):
         element.condition_exp.accept(self)
         element.if_statement.accept(self)
         element.else_statement.accept(self)
+        return None
   
 
     def visit_while(self, element: While) -> None:
         element.condition_exp.accept(self)
         element.statement.accept(self)
-
+        return None
     
     def visit_print(self, element: Print) -> None:
         element.print_exp.accept(self)
+        return None
 
     def visit_assign(self, element: Assign) -> None:
         element.left_side.accept(self)
         element.right_side.accept(self)
+        return None
 
     
     def visit_array_assign(self, element: ArrayAssign) -> None:
         element.array_name.accept(self)
         element.array_exp.accept(self)
         element.right_side.accept(self)
-
+        return None
     
     def visit_and(self, element: And) -> None:
         element.left_side.accept(self)
         element.right_side.accept(self)
+        return None
 
     def visit_less_than(self, element: LessThan) -> None:
         element.left_side.accept(self)
         element.right_side.accept(self)
+        return None
 
 
     def visit_plus(self, element: Plus) -> None:
         element.left_side.accept(self)
         element.right_side.accept(self)
+        return None
 
 
     def visit_minus(self, element: Minus) -> None:
         element.left_side.accept(self)
         element.right_side.accept(self)
+        return None
 
     
     def visit_times(self, element: Times) -> None:
         element.left_side.accept(self)
         element.right_side.accept(self)
+        return None
 
 
     def visit_array_lookup(self, element: ArrayLookup) -> None:
         element.out_side_exp.accept(self)
         element.in_side_exp.accept(self)
+        return None
 
     def visit_array_length(self, element: ArrayLength) -> None:
         element.length_exp.accept(self)
+        return None
 
 
 
@@ -856,6 +735,8 @@ class FillSymbolTableVisitor(Visitor):
         element.callee_name.accept(self)
         for index in range(element.arg_list.size()):
             element.arg_list.element_at(index).accept(self)
+        
+        return None
 
 
     def visit_integer_literal(self, element: IntegerLiteral) -> None:
@@ -878,14 +759,17 @@ class FillSymbolTableVisitor(Visitor):
 
     def visit_new_array(self, element: NewArray) -> None:
         element.new_exp.accept(self)
+        return None
 
 
     def visit_new_object(self, element: NewObject) -> None:
         element.object_name.accept(self)
+        return None
 
 
     def visit_not(self, element: Not) -> None:
         element.negated_exp.accept(self)
+        return None
 
 
     def visit_identifier(self, element: Identifier) -> None:
@@ -894,150 +778,9 @@ class FillSymbolTableVisitor(Visitor):
 
 
 
-
 ########################################
 # AST Type Visitors
 ########################################
-class TypeVisitor(ABC):
-
-    @abstractmethod
-    def visit_program(self, element: Program) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_main_class(self, element: MainClass) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_class_decl_extends(self, element: ClassDeclExtends) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_class_decl_simple(self, element: ClassDeclSimple) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_var_decl(self, element: VarDecl) -> Type:
-        pass
-  
-    @abstractmethod
-    def visit_method_decl(self, element: MethodDecl) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_formal(self, element: Formal) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_int_array_type(self, element: IntArrayType) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_boolean_type(self, element: BooleanType) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_integer_type(self, element: IntegerType) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_identifier_type(self, element: IdentifierType) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_block(self, element: Block) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_if(self, element: If) -> Type:
-        pass
-  
-    @abstractmethod
-    def visit_while(self, element: While) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_print(self, element: Print) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_assign(self, element: Assign) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_array_assign(self, element: ArrayAssign) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_and(self, element: And) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_less_than(self, element: LessThan) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_plus(self, element: Plus) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_minus(self, element: Minus) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_times(self, element: Times) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_array_lookup(self, element: ArrayLookup) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_array_length(self, element: ArrayLength) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_call(self, element: Call) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_integer_literal(self, element: IntegerLiteral) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_true_exp(self, element: TrueExp) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_false_exp(self, element: FalseExp) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_identifier_exp(self, element: IdentifierExp) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_this(self, element: This) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_new_array(self, element: NewArray) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_new_object(self, element: NewObject) -> Type:
-        pass
-
-
-    @abstractmethod
-    def visit_not(self, element: Not) -> Type:
-        pass
-
-    @abstractmethod
-    def visit_identifier(self, element: Identifier) -> Type:
-        pass
-
-
 
 class TypeDepthFirstVisitor(TypeVisitor):
 
@@ -1048,7 +791,7 @@ class TypeDepthFirstVisitor(TypeVisitor):
         return None
 
     def visit_main_class(self, element: MainClass) -> Type:
-        element.class_name_identifier.accept_type(self)
+        element.class_name.accept_type(self)
         element.arg_name_ideintifier.accept_type(self)
         element.statement.accept_type(self)
         return None
@@ -1266,103 +1009,438 @@ class TypeCheckingVisitor(TypeVisitor):
         return self.symbol_table
 
     def visit_program(self, element: Program) -> Type:
-        pass
+        element.main_class.accept_type(self)
+        for index in range(element.class_decl_list.size()):
+            element.class_decl_list.element_at(index).accept_type(self)
+        return None
 
     def visit_main_class(self, element: MainClass) -> Type:
-        pass
+        self.symbol_table.set_curr_class(element.class_name.name)
+        self.symbol_table.set_curr_method("main")
+        element.class_name.accept_type(self)
+        element.arg_name_ideintifier.accept_type(self)
+        element.statement.accept_type(self)
+        return None
 
     def visit_class_decl_extends(self, element: ClassDeclExtends) -> Type:
-        pass
+        self.symbol_table.set_curr_class(element.class_name.name)
+        element.class_name.accept_type(self)
+        element.super_class_name.accept_type(self)
+
+        for index in range(element.var_decl_list.size()):
+            element.var_decl_list.element_at(index).accept_type(self)
+    
+        for index in range(element.method_decl_list.size()):
+            element.method_decl_list.element_at(index).accept_type(self)
+
+        return None    
 
     def visit_class_decl_simple(self, element: ClassDeclSimple) -> Type:
-        pass
+        self.symbol_table.set_curr_class(element.class_name.name)
+        element.class_name.accept_type(self)
+
+        for index in range(element.var_decl_list.size()):
+            element.var_decl_list.element_at(index).accept_type(self)
+    
+        for index in range(element.method_decl_list.size()):
+            element.method_decl_list.element_at(index).accept_type(self)
+        
+        return None
 
     def visit_var_decl(self, element: VarDecl) -> Type:
-        pass
+        element.type.accept_type(self)
+        element.name.accept_type(self)
+        return None
+     
 
     def visit_method_decl(self, element: MethodDecl) -> Type:
-        pass
+        self.symbol_table.set_curr_method(element.name.name)
+        element.type.accept_type(self)
+        element.name.accept_type(self)
+
+        for index in range(element.formal_param_list.size()):
+            element.formal_param_list.element_at(index).accept_type(self)
+
+        for index in range(element.var_decl_list.size()):
+            element.var_decl_list.element_at(index).accept_type(self)
+
+        for index in range(element.statement_list.size()):
+            element.statement_list.element_at(index).accept_type(self)
+
+        method_return_type = self.symbol_table.curr_method.get_return_type()
+        return_exp_type = element.return_exp.accept_type(self)
+        
+        if(type(method_return_type) != type(return_exp_type)):
+            self.add_semantic_error(SemanticErrorType.RETURN_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = " expected return type " + str(type(method_return_type)) + " not " + str(type(return_exp_type))
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.RETURN_TYPE_MISMATCH.name, error_msg)
+
+        return None
+
 
     def visit_formal(self, element: Formal) -> Type:
-        pass
+        element.type.accept_type(self)
+        element.type.accept_type(self)
+        return None
+
 
     def visit_int_array_type(self, element: IntArrayType) -> Type:
-        pass
+        return element
     
     def visit_boolean_type(self, element: BooleanType) -> Type:
-        pass
+        return element
     
     def visit_integer_type(self, element: IntegerType) -> Type:
-        pass
+        return element
 
+    
     def visit_identifier_type(self, element: IdentifierType) -> Type:
-        pass
+        return element
+
     
     def visit_block(self, element: Block) -> Type:
-        pass
+        for index in range(element.statement_list.size()):
+            element.statement_list.element_at(index).accept_type(self)
+        
+        return None
 
     def visit_if(self, element: If) -> Type:
-        pass
+        condition_exp_type = element.condition_exp.accept_type(self)
+        if(not isinstance(condition_exp_type, BooleanType)):
+            self.add_semantic_error(SemanticErrorType.IF_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " if condition type must be BooleanType not " + str(type(condition_exp_type))
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.IF_TYPE_MISMATCH.name, error_msg)
+
+        element.if_statement.accept_type(self)
+        element.else_statement.accept_type(self)
+        return None
+  
 
     def visit_while(self, element: While) -> Type:
-        pass
+        condition_exp_type = element.condition_exp.accept_type(self)
+        if(not isinstance(condition_exp_type, BooleanType)):
+            self.add_semantic_error(SemanticErrorType.WHILE_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " while condition type must be BooleanType not " + str(type(condition_exp_type))
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.WHILE_TYPE_MISMATCH.name, error_msg)
+
+        element.statement.accept_type(self)
+        return None
+
     
     def visit_print(self, element: Print) -> Type:
-        pass
+        element.print_exp.accept_type(self)
+        return None
+
 
     def visit_assign(self, element: Assign) -> Type:
-        pass
+        left_side_type = element.left_side.accept_type(self)
+        right_side_type = element.right_side.accept_type(self)
+
+        if((type(left_side_type) is None) or (type(right_side_type) is None) or (type(left_side_type) != type(right_side_type))):
+            self.add_semantic_error(SemanticErrorType.ASSIGN_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " left side type " + str(type(left_side_type))
+            error_msg = error_msg + " and right side type " + str(type(right_side_type))
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.ASSIGN_TYPE_MISMATCH.name, error_msg)
+
+        return None
+
     
     def visit_array_assign(self, element: ArrayAssign) -> Type:
-        pass
+        array_type = element.array_name.accept_type(self)
+        array_index_type = element.array_exp.accept_type(self)
+
+        if(not isinstance(array_index_type, IntegerType)):
+            self.add_semantic_error(SemanticErrorType.INDEX_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the index of array " + str(element.array_name.name)
+            error_msg = error_msg + " must be IntegerType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.INDEX_TYPE_MISMATCH.name, error_msg)
+
+
+        right_side_type = element.right_side.accept_type(self)
+
+        if((not isinstance(array_type, IntArrayType)) or (not isinstance(right_side_type, IntegerType))):
+            self.add_semantic_error(SemanticErrorType.ARRAY_ASSIGN_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the array " + str(element.array_name.name)
+            error_msg = error_msg + " must be IntArrayType and must be assigned with values of IntegerType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.ARRAY_ASSIGN_TYPE_MISMATCH.name, error_msg)
+
+        return None
+
     
     def visit_and(self, element: And) -> Type:
-        pass
+        left_side_type = element.left_side.accept_type(self)
+        if(not isinstance(left_side_type, BooleanType)):
+            self.add_semantic_error(SemanticErrorType.AND_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the AND left side type must be BooleanType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.AND_TYPE_MISMATCH.name, error_msg)
+
+        right_side_type = element.right_side.accept_type(self)
+        if(not isinstance(right_side_type, BooleanType)):
+            self.add_semantic_error(SemanticErrorType.AND_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the AND right side type must be BooleanType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.AND_TYPE_MISMATCH.name, error_msg)
+
+        return BooleanType()
 
     def visit_less_than(self, element: LessThan) -> Type:
-        pass
+        left_side_type = element.left_side.accept_type(self)
+        if(not isinstance(left_side_type, IntegerType)):
+            self.add_semantic_error(SemanticErrorType.LESS_THAN_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the LessThen left side type must be IntegerType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.LESS_THAN_TYPE_MISMATCH.name, error_msg)
+
+        right_side_type = element.right_side.accept_type(self)
+        if(not isinstance(right_side_type, IntegerType)):
+            self.add_semantic_error(SemanticErrorType.LESS_THAN_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the LessThen right side type must be IntegerType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.LESS_THAN_TYPE_MISMATCH.name, error_msg)
+
+        return BooleanType()
+
 
     def visit_plus(self, element: Plus) -> Type:
-        pass
+        left_side_type = element.left_side.accept_type(self)
+        if(not isinstance(left_side_type, IntegerType)):
+            self.add_semantic_error(SemanticErrorType.PLUS_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the PLUS left side type must be IntegerType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.PLUS_TYPE_MISMATCH.name, error_msg)
+
+        right_side_type = element.right_side.accept_type(self)
+        if(not isinstance(right_side_type, IntegerType)):
+            self.add_semantic_error(SemanticErrorType.PLUS_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the PLUS right side type must be IntegerType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.PLUS_TYPE_MISMATCH.name, error_msg)
+
+        return IntegerType()
+
 
     def visit_minus(self, element: Minus) -> Type:
-        pass
+        left_side_type = element.left_side.accept_type(self)
+        if(not isinstance(left_side_type, IntegerType)):
+            self.add_semantic_error(SemanticErrorType.MINUS_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the MINUS left side type must be IntegerType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.MINUS_TYPE_MISMATCH.name, error_msg)
+
+        right_side_type = element.right_side.accept_type(self)
+        if(not isinstance(right_side_type, IntegerType)):
+            self.add_semantic_error(SemanticErrorType.MINUS_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the MINUS right side type must be IntegerType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.MINUS_TYPE_MISMATCH.name, error_msg)
+
+        return IntegerType()
+
     
     def visit_times(self, element: Times) -> Type:
-        pass
+        left_side_type = element.left_side.accept_type(self)
+        if(not isinstance(left_side_type, IntegerType)):
+            self.add_semantic_error(SemanticErrorType.TIMES_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the TIMES left side type must be IntegerType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.TIMES_TYPE_MISMATCH.name, error_msg)
+
+        right_side_type = element.right_side.accept_type(self)
+        if(not isinstance(right_side_type, IntegerType)):
+            self.add_semantic_error(SemanticErrorType.TIMES_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the TIMES right side type must be IntegerType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.TIMES_TYPE_MISMATCH.name, error_msg)
+
+        return IntegerType()
+
 
     def visit_array_lookup(self, element: ArrayLookup) -> Type:
-        pass
+        out_side_exp_type = element.out_side_exp.accept_type(self)
+        if(not isinstance(out_side_exp_type, IntArrayType)):
+            self.add_semantic_error(SemanticErrorType.ARRAY_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " array must be IntArrayType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.ARRAY_TYPE_MISMATCH.name, error_msg)
+
+        in_side_exp_type = element.in_side_exp.accept_type(self)
+        if(not isinstance(in_side_exp_type, IntegerType)):
+            self.add_semantic_error(SemanticErrorType.INDEX_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the index of array must be IntegerType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.INDEX_TYPE_MISMATCH.name, error_msg)
+
+        return IntegerType()
 
     def visit_array_length(self, element: ArrayLength) -> Type:
-        pass
+        length_exp_type = element.length_exp.accept_type(self)
+        if(not isinstance(length_exp_type, IntArrayType)):
+            self.add_semantic_error(SemanticErrorType.ARRAY_LENGTH_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " array must be IntArrayType"
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.ARRAY_LENGTH_TYPE_MISMATCH.name, error_msg)
+
+        return IntegerType()
+
 
     def visit_call(self, element: Call) -> Type:
-        pass
+        callee_exp_type = element.callee_exp.accept_type(self)
+        
+        if(not isinstance(callee_exp_type, IdentifierType)):
+            self.add_semantic_error(SemanticErrorType.INVALID_OBJECT_IDENTIFIER)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " invalid object identifier in call."
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.INVALID_OBJECT_IDENTIFIER.name, error_msg)
+            return None
+        
+        class_entry = self.symbol_table.get_class_entry(callee_exp_type.name)
+        if(class_entry is None):
+            self.add_semantic_error(SemanticErrorType.UNDECLARED_CLASS)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " " + callee_exp_type.name + " is an undeclared class in call."                
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.UNDECLARED_CLASS.name, error_msg)
+            return None
+        
+        method_entry = class_entry.get_method(element.callee_name.name)
+
+        if(method_entry is None):
+            self.add_semantic_error(SemanticErrorType.UNDECLARED_METHOD)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " " + element.callee_name.name + " is an undeclared method in call."                
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.UNDECLARED_METHOD.name, error_msg)
+            return None
+        
+        method_return_type = method_entry.get_return_type()
+        if(element.arg_list.size() != method_entry.get_num_params()):
+            self.add_semantic_error(SemanticErrorType.WRONG_ARG_NUMBER)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " " + element.callee_name.name + " wrong number of args for call."                
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.WRONG_ARG_NUMBER.name, error_msg)
+            return method_return_type
+
+
+        for index in range(element.arg_list.size()):
+            arg_type = element.arg_list.element_at(index).accept_type(self)
+            expected_type = method_entry.get_param_by_position(index)
+
+            if((arg_type is None) or (type(arg_type) != type(expected_type))):
+                self.add_semantic_error(SemanticErrorType.ARG_TYPE_MISMATCH)
+                error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+                error_msg = error_msg + " expected " + str(type(expected_type)) + " got " + str(type(arg_type))                
+                MJLogger.semantic_log(self.src_file_name, SemanticErrorType.ARG_TYPE_MISMATCH.name, error_msg)                
+
+        return method_return_type
+
 
     def visit_integer_literal(self, element: IntegerLiteral) -> Type:
-        pass
+        return IntegerType()
+
 
     def visit_true_exp(self, element: TrueExp) -> Type:
-        pass
+        return BooleanType()
+
 
     def visit_false_exp(self, element: FalseExp) -> Type:
-        pass
+        return BooleanType()
+
 
     def visit_identifier_exp(self, element: IdentifierExp) -> Type:
-        pass
+        return_type = None
+
+        if(self.symbol_table.curr_method is not None):
+            return_type = self.symbol_table.curr_method.get_param_by_name(element.name)
+            if(return_type is None):
+                return_type = self.symbol_table.curr_method.get_local_by_name(element.name)
+                if(return_type is not None):
+                    return return_type
+            else:
+                return return_type
+
+        if(self.symbol_table.curr_class is not None):
+            return_type = self.symbol_table.curr_class.get_field(element.name)
+            if(return_type is not None):
+                return return_type
+
+        self.add_semantic_error(SemanticErrorType.UNDECLARED_IDENTIFIER)
+        error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+        error_msg = error_msg + element.name + " is an undeclared identifier."                
+        MJLogger.semantic_log(self.src_file_name, SemanticErrorType.UNDECLARED_IDENTIFIER.name, error_msg)
+
+        return return_type
+
 
     def visit_this(self, element: This) -> Type:
-        pass
+        if(self.symbol_table.curr_class is None):
+            self.add_semantic_error(SemanticErrorType.UNDECLARED_CLASS)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + element.name + " is an undeclared class."
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.UNDECLARED_CLASS.name, error_msg)
+        
+        return IdentifierType(self.symbol_table.curr_class_name)
+
 
     def visit_new_array(self, element: NewArray) -> Type:
-        pass
+        new_exp_type = element.new_exp.accept_type(self)
+        if(not isinstance(new_exp_type, IntegerType)):
+            self.add_semantic_error(SemanticErrorType.NEW_ARRAY_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " new array type mismatch."
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.NEW_ARRAY_TYPE_MISMATCH.name, error_msg)            
+        
+        return IntArrayType()
+
 
     def visit_new_object(self, element: NewObject) -> Type:
-        pass
+        if(not self.symbol_table.contains_class(element.object_name.name)):
+            self.add_semantic_error(SemanticErrorType.NEW_OBJECT_UNDECLARED_CLASS)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + element.object_name.name + " is an undeclared class."
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.NEW_OBJECT_UNDECLARED_CLASS.name, error_msg)
+
+        return IdentifierType(element.object_name.name)
+
 
     def visit_not(self, element: Not) -> Type:
-        pass
+        negated_exp_type = element.negated_exp.accept_type(self)
+
+        if(not isinstance(negated_exp_type, BooleanType)):
+            self.add_semantic_error(SemanticErrorType.NOT_TYPE_MISMATCH)
+            error_msg = self.symbol_table.curr_class_name + "#" + self.symbol_table.curr_method_name
+            error_msg = error_msg + " the NOT expression must be BooleanType."
+            MJLogger.semantic_log(self.src_file_name, SemanticErrorType.NOT_TYPE_MISMATCH.name, error_msg)
+
+        return BooleanType()
+
 
     def visit_identifier(self, element: Identifier) -> Type:
-        pass
+        return_type = None
+
+        if(self.symbol_table.curr_method is not None):
+            return_type = self.symbol_table.curr_method.get_param_by_name(element.name)
+
+            if((return_type is None) and (self.symbol_table.curr_method == "main")):
+                return IntArrayType()
+
+            if(return_type is None):
+                return_type = self.symbol_table.curr_method.get_local_by_name(element.name)
+                if(return_type is not None):
+                    return return_type
+            else:
+                return return_type
+
+        if(self.symbol_table.curr_class is not None):
+            return_type = self.symbol_table.curr_class.get_field(element.name)
+            if(return_type is not None):
+                return return_type
+
+        if(self.symbol_table.contains_class(element.name)):
+            return_type = IdentifierType(element.name)
+
+        return return_type

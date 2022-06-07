@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 
-from pymjc.front.visitor import *
+from pymjc.front.visitortypes import *
 
 class Component(ABC):
     @abstractmethod
@@ -24,8 +24,8 @@ class Program(Component):
         return visitor.visit_program(self)
 
 class MainClass(Component):
-    def __init__(self, class_name_identifier: Identifier, arg_name_ideintifier: Identifier, statement: Statement) -> None:
-        self.class_name_identifier = class_name_identifier
+    def __init__(self, class_name: Identifier, arg_name_ideintifier: Identifier, statement: Statement) -> None:
+        self.class_name = class_name
         self.arg_name_ideintifier = arg_name_ideintifier
         self.statement = statement
 

@@ -68,6 +68,7 @@ def process_debug_file(debug_file):
 def compute_semantic_oracles(semantic_errors):
     semantic_oracle = {"number_of_ALREADY_DECLARED_CLASS": semantic_errors["ALREADY_DECLARED_CLASS"],
                        "number_of_ALREADY_DECLARED_METHOD": semantic_errors["ALREADY_DECLARED_METHOD"],
+                       "number_of_ALREADY_DECLARED_FIELD": semantic_errors["ALREADY_DECLARED_FIELD"],
                        "number_of_ALREADY_DECLARED_VAR": semantic_errors["ALREADY_DECLARED_VAR"],
                        "number_of_AND_TYPE_MISMATCH": semantic_errors["AND_TYPE_MISMATCH"],
                        "number_of_ARG_TYPE_MISMATCH": semantic_errors["ARG_TYPE_MISMATCH"],
