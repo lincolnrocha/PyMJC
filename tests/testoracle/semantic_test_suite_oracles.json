@@ -33,6 +33,7 @@
         "number_of_ALREADY_DECLARED_CLASS": 0,
         "number_of_ALREADY_DECLARED_METHOD": 0,
         "number_of_ALREADY_DECLARED_FIELD": 0,
+        "number_of_ALREADY_DECLARED_VAR":0,
         "number_of_AND_TYPE_MISMATCH": 0,
         "number_of_ARG_TYPE_MISMATCH": 0,
         "number_of_ARRAY_ASSIGN_TYPE_MISMATCH": 0,
