@@ -8,7 +8,7 @@ class B extends D {
 
     public int oneMethod(){
         obj = 0;
-		    return 0;
+		return 0;
     }
 
     public int otherMethod(){

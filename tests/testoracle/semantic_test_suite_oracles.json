@@ -429,7 +429,7 @@
         "number_of_ARRAY_ASSIGN_TYPE_MISMATCH": 0,
         "number_of_ARRAY_LENGTH_TYPE_MISMATCH": 0,
         "number_of_ARRAY_TYPE_MISMATCH": 0,
-        "number_of_ASSIGN_TYPE_MISMATCH": 0,
+        "number_of_ASSIGN_TYPE_MISMATCH": 1,
         "number_of_DUPLICATED_ARG": 0,
         "number_of_IF_TYPE_MISMATCH": 0,
         "number_of_INDEX_TYPE_MISMATCH": 0,

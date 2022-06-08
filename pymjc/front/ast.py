@@ -24,9 +24,9 @@ class Program(Component):
         return visitor.visit_program(self)
 
 class MainClass(Component):
-    def __init__(self, class_name: Identifier, arg_name_ideintifier: Identifier, statement: Statement) -> None:
-        self.class_name = class_name
-        self.arg_name_ideintifier = arg_name_ideintifier
+    def __init__(self, class_name_id: Identifier, arg_name_id: Identifier, statement: Statement) -> None:
+        self.class_name_id = class_name_id
+        self.arg_name_id = arg_name_id
         self.statement = statement
 
     def accept(self, visitor: Visitor) -> None:
@@ -62,9 +62,9 @@ class ClassDeclList():
       return len(self.class_decl_list)
 
 class ClassDeclExtends(ClassDecl):
-    def __init__(self, class_name: Identifier, super_class_name: Identifier, var_decl_list: VarDeclList, method_decl_list: MethodDeclList):
-        self.class_name = class_name
-        self.super_class_name = super_class_name
+    def __init__(self, class_name_id: Identifier, super_class_name_id: Identifier, var_decl_list: VarDeclList, method_decl_list: MethodDeclList):
+        self.class_name_id = class_name_id
+        self.super_class_name_id = super_class_name_id
         self.var_decl_list = var_decl_list
         self.method_decl_list = method_decl_list
 
@@ -75,8 +75,8 @@ class ClassDeclExtends(ClassDecl):
         return visitor.visit_class_decl_extends(self)
 
 class ClassDeclSimple(ClassDecl):
-    def __init__(self, class_name: Identifier, var_decl_list: VarDeclList, method_decl_list: MethodDeclList):
-        self.class_name = class_name
+    def __init__(self, class_name_id: Identifier, var_decl_list: VarDeclList, method_decl_list: MethodDeclList):
+        self.class_name_id = class_name_id
         self.var_decl_list = var_decl_list
         self.method_decl_list = method_decl_list
 
@@ -87,9 +87,9 @@ class ClassDeclSimple(ClassDecl):
         return visitor.visit_class_decl_simple(self)
 
 class VarDecl(Component):
-    def __init__(self, type: Type, name: Identifier):
+    def __init__(self, type: Type, name_id: Identifier):
         self.type = type
-        self.name = name
+        self.name_id = name_id
 
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_var_decl(self)
@@ -115,9 +115,9 @@ class VarDeclList():
 
 
 class MethodDecl(Component):
-    def __init__(self, type: Type, name: Identifier, formal_param_list: FormalList, var_decl_list: VarDeclList, statement_list: StatementList, return_exp: Exp):
+    def __init__(self, type: Type, name_id: Identifier, formal_param_list: FormalList, var_decl_list: VarDeclList, statement_list: StatementList, return_exp: Exp):
         self.type = type
-        self.name = name
+        self.name_id = name_id
         self.formal_param_list = formal_param_list
         self.var_decl_list = var_decl_list
         self.statement_list = statement_list
@@ -147,9 +147,9 @@ class MethodDeclList():
 
 
 class Formal(Component):
-    def __init__(self, type: Type, name: Identifier):
+    def __init__(self, type: Type, name_id: Identifier):
         self.type = type
-        self.name = name
+        self.name_id = name_id
 
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_formal(self)
@@ -235,9 +235,9 @@ class While(Statement):
         return visitor.visit_while(self)
 
 class Assign(Statement):
-    def __init__(self, left_side: Identifier, right_side: Exp):
-        self.left_side = left_side
-        self.right_side = right_side
+    def __init__(self, left_side_id: Identifier, right_side_exp: Exp):
+        self.left_side_id = left_side_id
+        self.right_side_exp = right_side_exp
 
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_assign(self)
@@ -257,10 +257,10 @@ class Block(Statement):
         return visitor.visit_block(self)
 
 class ArrayAssign(Statement):
-    def __init__(self, array_name: Identifier, array_exp: Exp, right_side: Exp):
-        self.array_name = array_name
+    def __init__(self, array_name_id: Identifier, array_exp: Exp, right_side_exp: Exp):
+        self.array_name_id = array_name_id
         self.array_exp = array_exp
-        self.right_side = right_side
+        self.right_side_exp = right_side_exp
 
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_array_assign(self)
@@ -391,9 +391,9 @@ class IntegerLiteral(Exp):
         return visitor.visit_integer_literal(self)
 
 class Minus(Exp):
-    def __init__(self, left_side: Exp, right_side: Exp):
-        self.left_side = left_side
-        self.right_side = right_side
+    def __init__(self, left_side_exp: Exp, right_side_exp: Exp):
+        self.left_side_exp = left_side_exp
+        self.right_side_exp = right_side_exp
     
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_minus(self)
@@ -402,9 +402,9 @@ class Minus(Exp):
         return visitor.visit_minus(self)
 
 class Plus(Exp):
-    def __init__(self, left_side: Exp, right_side: Exp):
-        self.left_side = left_side
-        self.right_side = right_side
+    def __init__(self, left_side_exp: Exp, right_side_exp: Exp):
+        self.left_side_exp = left_side_exp
+        self.right_side_exp = right_side_exp
     
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_plus(self)
@@ -413,9 +413,9 @@ class Plus(Exp):
         return visitor.visit_plus(self)
 
 class Times(Exp):
-    def __init__(self, left_side: Exp, right_side: Exp):
-        self.left_side = left_side
-        self.right_side = right_side
+    def __init__(self, left_side_exp: Exp, right_side_exp: Exp):
+        self.left_side_exp = left_side_exp
+        self.right_side_exp = right_side_exp
     
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_times(self)
@@ -424,9 +424,9 @@ class Times(Exp):
         return visitor.visit_times(self)
 
 class LessThan(Exp):
-    def __init__(self, left_side: Exp, right_side: Exp):
-        self.left_side = left_side
-        self.right_side = right_side
+    def __init__(self, left_side_exp: Exp, right_side_exp: Exp):
+        self.left_side_exp = left_side_exp
+        self.right_side_exp = right_side_exp
     
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_less_than(self)
@@ -435,9 +435,9 @@ class LessThan(Exp):
         return visitor.visit_less_than(self)
 
 class And(Exp):
-    def __init__(self, left_side: Exp, right_side: Exp):
-        self.left_side = left_side
-        self.right_side = right_side
+    def __init__(self, left_side_exp: Exp, right_side_exp: Exp):
+        self.left_side_exp = left_side_exp
+        self.right_side_exp = right_side_exp
     
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_and(self)
@@ -457,9 +457,9 @@ class ArrayLookup(Exp):
         return visitor.visit_array_lookup(self)
 
 class Call(Exp):
-    def __init__(self, callee_exp: Exp, callee_name: Identifier, arg_list: ExpList):
+    def __init__(self, callee_exp: Exp, callee_name_id: Identifier, arg_list: ExpList):
         self.callee_exp = callee_exp
-        self.callee_name = callee_name
+        self.callee_name_id = callee_name_id
         self.arg_list = arg_list
     
     def accept(self, visitor: Visitor) -> None:
@@ -499,8 +499,8 @@ class NewArray(Exp):
         return visitor.visit_new_array(self)
 
 class NewObject(Exp):
-    def __init__(self, object_name: Identifier):
-        self.object_name = object_name
+    def __init__(self, object_name_id: Identifier):
+        self.object_name_id = object_name_id
     
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_new_object(self)
