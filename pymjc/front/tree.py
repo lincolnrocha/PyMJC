@@ -1,7 +1,9 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
+from ast import stmt
+import sys
 
-from pymjc.front.temp import Label, LabelList, Temp
+from pymjc.front.temp import DefaultMap, Label, LabelList, Temp, TempMap
 
 
 class Exp(ABC):
@@ -44,12 +46,12 @@ class BINOP(Exp):
 
 
 class CALL(Exp):
-    def __init__(self, func_exp: Exp, args_exp: ExpList):
+    def __init__(self, func_exp: Exp, arg_exp_list: ExpList):
         self.func_exp: Exp = func_exp
-        self.args_exp: ExpList = args_exp
+        self.arg_exp_list: ExpList = arg_exp_list
 
     def kids(self) -> ExpList:
-        return ExpList(self.func_exp, self.args_exp)
+        return ExpList(self.func_exp, self.arg_exp_list)
 
     def build(self, kids: ExpList) -> Exp:
         return CALL(kids.head, kids.tail.head)
@@ -252,3 +254,270 @@ class CJUMP(Stm):
 
 
 
+class Print():
+    #sys.stdout
+    def __init__(self, out_path: str = None, temp_map: TempMap = None):
+        if out_path is not None:
+            sys.stdout = open(out_path, 'w')
+        
+        if temp_map is None:
+            self.temp_map = DefaultMap()
+        else:
+            self.temp_map = temp_map
+
+
+    def indent(self, d: int):
+        #for index in range(d):
+        print(d * ' ',  end='')
+
+    def say(self, string: str):
+         print(string)
+
+    def say(self, string: str):
+         print(string, end='')
+
+    def sayln(self, string: str):
+         self.say(string)
+         self.say('\n')
+
+
+    def print_stm(self, stmt : Stm, d: int):
+        if stmt is None:
+            self.indent(d)
+            return None
+
+        if isinstance(stmt, SEQ):
+            self.print_seq(stmt, d)
+
+        elif isinstance(stmt, LABEL):
+            self.print_label(stmt, d)
+
+        elif isinstance(stmt, JUMP):
+            self.print_jump(stmt, d)
+
+        elif isinstance(stmt, CJUMP):
+            self.print_cjump(stmt, d)
+
+        elif isinstance(stmt, MOVE):
+            self.print_move(stmt, d)
+
+        elif isinstance(stmt, EXP):
+            self.print_sexp(stmt, d)
+
+        else:
+            raise RuntimeError("Print.print_stm()")
+
+
+    def print_seq(self, stmt : SEQ, d: int):
+        self.indent(d)
+        self.sayln("SEQ(")
+        self.print_stm(stmt.left, d + 1)
+        self.sayln(",")
+        self.print_stm(stmt.right, d + 1)
+        self.say(")")
+
+
+    def print_label(self, stmt: LABEL, d: int):
+        self.indent(d)
+        self.say("LABEL ")
+        self.say(stmt.label.to_string())
+
+
+    def print_jump(self, stmt: JUMP, d: int):
+        self.indent(d)
+        self.sayln("JUMP(")
+        self.print_exp(stmt.exp, d + 1)
+        self.say(")")
+
+
+    def print_cjump(self, stmt: CJUMP, d: int):
+        self.indent(d)
+        self.say("CJUMP(")
+
+        match(stmt.rel_op):
+            case CJUMP.EQ:
+                self.say("EQ")
+
+            case CJUMP.NE:
+                self.say("NE")
+
+            case CJUMP.LT:
+                self.say("LT")
+
+            case CJUMP.GT:
+                self.say("GT")
+
+            case CJUMP.LE:
+                self.say("LE")
+
+            case CJUMP.GE:
+                self.say("GE")
+
+            case CJUMP.ULT:
+                self.say("ULT")
+
+            case CJUMP.ULE:
+                self.say("ULE")
+
+            case CJUMP.UGT:
+                self.say("UGT")
+
+            case CJUMP.UGE:
+                self.say("UGE")
+
+            case _:
+                raise RuntimeError("Print.print_cjump()")
+        
+        self.sayln(",")
+        self.print_exp(stmt.left_exp, d + 1)
+        self.sayln(",")
+        self.print_exp(stmt.right_exp, d + 1)
+        self.sayln(",")
+        self.indent(d + 1)
+        self.say(stmt.if_true.to_string())
+        self.say(",")
+        self.say(stmt.if_false.to_string())
+        self.say(")")
+
+
+    def print_move(self, stmt: MOVE, d: int):
+        self.indent(d)
+        self.sayln("MOVE(")
+        self.print_exp(stmt.dest, d + 1)
+        self.sayln(",")
+        self.print_exp(stmt.src, d + 1)
+        self.say(")")
+
+
+    def print_sexp(self, stmt: EXP, d: int):
+        self.indent(d)
+        self.sayln("EXP(")
+        self.print_exp(stmt.exp, d + 1)
+        self.say(")")
+
+
+    def print_exp(self, exp : Exp, d: int):
+        if exp is None:
+            self.indent(d)
+            return None
+
+        if isinstance(exp, BINOP):
+            self.print_binop(exp, d)
+
+        elif isinstance(exp, MEM):
+            self.print_mem(exp, d)
+
+        elif isinstance(exp, TEMP):
+            self.print_temp(exp, d)
+
+        elif isinstance(exp, ESEQ):
+            self.print_eseq(exp, d)
+
+        elif isinstance(exp, NAME):
+            self.print_name(exp, d)
+
+        elif isinstance(exp, CONST):
+            self.print_const(exp, d)
+
+        elif isinstance(exp, CALL):
+            self.print_call(exp, d)
+
+        else:
+            raise RuntimeError("Print.print_exp()")
+
+
+    def print_binop(self, exp: BINOP, d: int):
+        self.indent(d)
+        self.say("BINOP(")
+
+        match(exp.binop):
+            case BINOP.PLUS:
+                self.say("PLUS")
+
+            case BINOP.MINUS:
+                self.say("MINUS")
+
+            case BINOP.MUL:
+                self.say("MUL")
+
+            case BINOP.DIV:
+                self.say("DIV")
+
+            case BINOP.AND:
+                self.say("AND")
+            
+            case BINOP.OR:
+                self.say("OR")
+
+            case BINOP.LSHIFT:
+                self.say("LSHIFT")
+
+            case BINOP.RSHIFT:
+                self.say("RSHIFT")
+
+            case BINOP.ARSHIFT:
+                self.say("ARSHIFT")
+
+            case BINOP.XOR:
+                self.say("XOR")
+
+            case _:
+                raise RuntimeError("Print.print_binop()")
+      
+        self.sayln(",")
+        self.print_exp(exp.left_exp, d + 1)
+        self.sayln(",")
+        self.print_exp(exp.right_exp, d + 1)
+        self.say(")")
+
+
+    def print_mem(self, exp: MEM, d: int):
+        self.indent(d)
+        self.sayln("MEM(")
+        self.print_exp(exp.exp, d + 1)
+        self.say(")")
+
+    def print_temp(self, exp: TEMP, d: int):
+        self.indent(d)
+        self.say("TEMP ")
+        self.say(self.temp_map.temp_map(exp.temp))
+
+    def print_eseq(self, exp: ESEQ, d: int):
+        self.indent(d)
+        self.sayln("ESEQ(")
+        self.print_stm(exp.stm, d + 1)
+        self.sayln(",")
+        self.print_exp(exp.exp, d + 1)
+        self.say(")")
+
+    def print_name(self, exp: NAME, d: int):
+        self.indent(d)
+        self.say("NAME ")
+        self.say(exp.label.to_string())
+
+    def print_const(self, exp: CONST, d: int):
+        self.indent(d)
+        self.say("CONST ")
+        self.say(str(exp.value))
+
+    def print_call(self, exp: CALL, d: int):
+        self.indent(d)
+        self.sayln("CALL(")
+        self.print_exp(exp.func_exp, d + 1)
+        
+        exp_list: ExpList = exp.arg_exp_list
+        
+        while exp_list is not None:
+            self.sayln(",")
+            self.print_exp(exp_list.head, d + 2)
+            exp_list = exp_list.tail
+
+        self.say(")")
+
+    def print_only_stm(self, stmt: Stm):
+        self.print_stm(stmt, 0)
+        self.say("\n")
+
+    def print_only_exp(self, exp: Exp):
+        self.print_exp(exp, 0)
+        self.say("\n")

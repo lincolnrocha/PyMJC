@@ -60,6 +60,9 @@ class Label():
         else:
             self.name = "L" + str(Label.count)
             Label.count += 1
+    
+    def to_string(self) -> str:
+        return self.name 
 
 
 class LabelList():
