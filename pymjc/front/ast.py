@@ -12,6 +12,10 @@ class Component(ABC):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         pass
 
+    @abstractmethod
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        pass
+
 class Program(Component):
     def __init__(self, main_class: MainClass, class_decl_list: ClassDeclList):
         self.main_class = main_class
@@ -21,6 +25,9 @@ class Program(Component):
         visitor.visit_program(self)
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_program(self)
+    
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_program(self)
 
 class MainClass(Component):
@@ -35,6 +42,9 @@ class MainClass(Component):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_main_class(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_main_class(self)
+
 class ClassDecl(Component):
 
     @abstractmethod
@@ -44,6 +54,11 @@ class ClassDecl(Component):
     @abstractmethod
     def accept_type(self, visitor: TypeVisitor) -> Type:
         pass
+
+    @abstractmethod
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        pass
+
 
 class ClassDeclList():
     def __init__(self):
@@ -74,6 +89,10 @@ class ClassDeclExtends(ClassDecl):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_class_decl_extends(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_class_decl_extends(self)
+
+
 class ClassDeclSimple(ClassDecl):
     def __init__(self, class_name_id: Identifier, var_decl_list: VarDeclList, method_decl_list: MethodDeclList):
         self.class_name_id = class_name_id
@@ -86,6 +105,9 @@ class ClassDeclSimple(ClassDecl):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_class_decl_simple(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_class_decl_simple(self)
+
 class VarDecl(Component):
     def __init__(self, type: Type, name_id: Identifier):
         self.type = type
@@ -95,6 +117,9 @@ class VarDecl(Component):
         visitor.visit_var_decl(self)
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_var_decl(self)
+
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_var_decl(self)
 
 class VarDeclList():
@@ -129,6 +154,9 @@ class MethodDecl(Component):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_method_decl(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_method_decl(self)
+
 class MethodDeclList():
     def __init__(self):
         self.method_decl_list = []
@@ -155,6 +183,9 @@ class Formal(Component):
         visitor.visit_formal(self)
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_formal(self)
+
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_formal(self)
 
 class FormalList():
@@ -184,6 +215,10 @@ class Statement(Component):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         pass
 
+    @abstractmethod    
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        pass
+
 class StatementList():
     def __init__(self):
         self.statement_list = []
@@ -211,6 +246,9 @@ class Print(Statement):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_print(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_print(self)
+
 class If(Statement):
     def __init__(self, condition_exp: Exp, if_statement: Statement, else_statement: Statement):
         self.condition_exp = condition_exp
@@ -221,6 +259,9 @@ class If(Statement):
         visitor.visit_if(self)
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_if(self)
+
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_if(self)
 
 class While(Statement):
@@ -234,6 +275,9 @@ class While(Statement):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_while(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_while(self)
+
 class Assign(Statement):
     def __init__(self, left_side_id: Identifier, right_side_exp: Exp):
         self.left_side_id = left_side_id
@@ -245,6 +289,9 @@ class Assign(Statement):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_assign(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_assign(self)
+
 
 class Block(Statement):
     def __init__(self, statement_list: StatementList):
@@ -254,6 +301,9 @@ class Block(Statement):
         visitor.visit_block(self)
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_block(self)
+
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_block(self)
 
 class ArrayAssign(Statement):
@@ -268,6 +318,9 @@ class ArrayAssign(Statement):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_array_assign(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_array_assign(self)
+
 class Identifier(Component):
     def __init__(self, name: str):
         self.name = name
@@ -276,6 +329,9 @@ class Identifier(Component):
         visitor.visit_identifier(self)
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_identifier(self)
+
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_identifier(self)
 
 class Type(Component):
@@ -288,12 +344,19 @@ class Type(Component):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         pass
 
+    @abstractmethod
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        pass
+
 class BooleanType(Type):
     
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_boolean_type(self)
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_boolean_type(self)
+
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_boolean_type(self)
 
 class IntegerType(Type):
@@ -304,12 +367,18 @@ class IntegerType(Type):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_integer_type(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_integer_type(self)
+
 class IntArrayType(Type):
 
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_int_array_type(self)
     
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_int_array_type(self)
+
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_int_array_type(self)
 
 class IdentifierType(Type):
@@ -322,6 +391,9 @@ class IdentifierType(Type):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_identifier_type(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_identifier_type(self)
+
 class Exp(Component):
 
     @abstractmethod
@@ -330,6 +402,10 @@ class Exp(Component):
     
     @abstractmethod
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        pass
+
+    @abstractmethod
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         pass
 
 class ExpList():
@@ -356,6 +432,9 @@ class This(Exp):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_this(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_this(self)
+
 class IdentifierExp(Exp):
     def __init__(self, name: str):
         self.name = name
@@ -366,6 +445,9 @@ class IdentifierExp(Exp):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_identifier_exp(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_identifier_exp(self)
+
 class FalseExp(Exp):
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_false_exp(self)
@@ -373,11 +455,17 @@ class FalseExp(Exp):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_false_exp(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_false_exp(self)
+
 class TrueExp(Exp):
     def accept(self, visitor: Visitor) -> None:
         visitor.visit_true_exp(self)
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_true_exp(self)
+
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_true_exp(self)
 
 class IntegerLiteral(Exp):
@@ -388,6 +476,9 @@ class IntegerLiteral(Exp):
         visitor.visit_integer_literal(self)
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_integer_literal(self)
+
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_integer_literal(self)
 
 class Minus(Exp):
@@ -401,6 +492,9 @@ class Minus(Exp):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_minus(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_minus(self)
+
 class Plus(Exp):
     def __init__(self, left_side_exp: Exp, right_side_exp: Exp):
         self.left_side_exp = left_side_exp
@@ -411,6 +505,10 @@ class Plus(Exp):
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_plus(self)
+
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_plus(self)
+
 
 class Times(Exp):
     def __init__(self, left_side_exp: Exp, right_side_exp: Exp):
@@ -423,6 +521,9 @@ class Times(Exp):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_times(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_times(self)
+
 class LessThan(Exp):
     def __init__(self, left_side_exp: Exp, right_side_exp: Exp):
         self.left_side_exp = left_side_exp
@@ -432,6 +533,9 @@ class LessThan(Exp):
         visitor.visit_less_than(self)
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_less_than(self)
+    
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_less_than(self)
 
 class And(Exp):
@@ -445,6 +549,9 @@ class And(Exp):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_and(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_and(self)
+
 class ArrayLookup(Exp):
     def __init__(self, out_side_exp: Exp, in_side_exp: Exp):
         self.out_side_exp = out_side_exp
@@ -454,6 +561,9 @@ class ArrayLookup(Exp):
         visitor.visit_array_lookup(self)
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_array_lookup(self)
+
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_array_lookup(self)
 
 class Call(Exp):
@@ -468,6 +578,10 @@ class Call(Exp):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_call(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_call(self)
+
+
 class ArrayLength(Exp):
     def __init__(self, length_exp: Exp):
         self.length_exp = length_exp
@@ -476,6 +590,9 @@ class ArrayLength(Exp):
         visitor.visit_array_length(self)
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_array_length(self)
+
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_array_length(self)
 
 class Not(Exp):
@@ -488,6 +605,9 @@ class Not(Exp):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_not(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_not(self)
+
 class NewArray(Exp):
     def __init__(self, new_exp: Exp):
         self.new_exp = new_exp
@@ -498,6 +618,9 @@ class NewArray(Exp):
     def accept_type(self, visitor: TypeVisitor) -> Type:
         return visitor.visit_new_array(self)
 
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
+        return visitor.visit_new_array(self)
+
 class NewObject(Exp):
     def __init__(self, object_name_id: Identifier):
         self.object_name_id = object_name_id
@@ -506,4 +629,7 @@ class NewObject(Exp):
         visitor.visit_new_object(self)
 
     def accept_type(self, visitor: TypeVisitor) -> Type:
+        return visitor.visit_new_object(self)
+
+    def accept_ir(self, visitor: IRVisitor) -> ExpT:
         return visitor.visit_new_object(self)
