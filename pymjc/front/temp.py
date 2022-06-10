@@ -11,7 +11,7 @@ class Temp():
         Temp.count += 1
 
     def to_string(self) -> str:
-        return "t" + self.number
+        return "t" + str(self.number)
 
 
 class TempList():

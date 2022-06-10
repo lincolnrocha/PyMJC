@@ -21,7 +21,7 @@ class Access(ABC):
 class Frame(TempMap):
 
     @abstractmethod
-    def new_frame(self, symbols: Symbol, formal_list: BoolList) -> Frame:
+    def new_frame(self, symbol: Symbol, formal_list: BoolList) -> Frame:
         pass
 
     @abstractmethod
