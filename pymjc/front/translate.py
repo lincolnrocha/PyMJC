@@ -1,15 +1,14 @@
 from __future__ import annotations
-from turtle import st
 
-from pymjc.front.frame import Frame
-from pymjc.front.tree import Exp, Stm
+from pymjc.front import frame
+from pymjc.front import tree
 
 
-class ExpT():
-    def __init__(self, exp: Exp):
-        self.exp: Exp = exp
+class Exp():
+    def __init__(self, exp: tree.Exp):
+        self.exp: tree.Exp = exp
 
-    def un_ex(self) -> Exp:
+    def un_ex(self) -> tree.Exp:
         return self.exp
 
 class Frag():
@@ -24,9 +23,9 @@ class Frag():
 
 class ProcFrag (Frag):
 
-    def __init__(self, stmt: Stm, frame: Frame):
-        self.body: Stm = stmt
-        self.frame: Frame = frame
+    def __init__(self, stmt: tree.Stm, frame: frame.Frame):
+        self.body: tree.Stm = stmt
+        self.frame: frame.Frame = frame
 
 class DataFrag (Frag):
 

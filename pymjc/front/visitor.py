@@ -4,7 +4,7 @@ import enum
 
 from pymjc.front.ast import *
 from pymjc.front.frame import Frame
-from pymjc.front.translate import Frag
+from pymjc.front import translate
 from pymjc.front.tree import Stm
 from pymjc.front.visitorkinds import *
 from pymjc.front.symbol import *
@@ -1506,142 +1506,142 @@ class TranslateVisitor(IRVisitor):
     def proc_entry_exit(self, body: Stm) -> None:
         pass
 
-    def get_result(self) -> Frag:
+    def get_result(self) -> translate.Frag:
         pass
 
     @abstractmethod
-    def visit_program(self, element: Program) -> ExpT:
+    def visit_program(self, element: Program) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_main_class(self, element: MainClass) -> ExpT:
+    def visit_main_class(self, element: MainClass) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_class_decl_extends(self, element: ClassDeclExtends) -> ExpT:
+    def visit_class_decl_extends(self, element: ClassDeclExtends) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_class_decl_simple(self, element: ClassDeclSimple) -> ExpT:
+    def visit_class_decl_simple(self, element: ClassDeclSimple) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_var_decl(self, element: VarDecl) -> ExpT:
+    def visit_var_decl(self, element: VarDecl) -> translate.Exp:
         pass
   
     @abstractmethod
-    def visit_method_decl(self, element: MethodDecl) -> ExpT:
+    def visit_method_decl(self, element: MethodDecl) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_formal(self, element: Formal) -> ExpT:
+    def visit_formal(self, element: Formal) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_int_array_type(self, element: IntArrayType) -> ExpT:
+    def visit_int_array_type(self, element: IntArrayType) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_boolean_type(self, element: BooleanType) -> ExpT:
+    def visit_boolean_type(self, element: BooleanType) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_integer_type(self, element: IntegerType) -> ExpT:
+    def visit_integer_type(self, element: IntegerType) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_identifier_type(self, element: IdentifierType) -> ExpT:
+    def visit_identifier_type(self, element: IdentifierType) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_block(self, element: Block) -> ExpT:
+    def visit_block(self, element: Block) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_if(self, element: If) -> ExpT:
+    def visit_if(self, element: If) -> translate.Exp:
         pass
   
     @abstractmethod
-    def visit_while(self, element: While) -> ExpT:
+    def visit_while(self, element: While) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_print(self, element: Print) -> ExpT:
+    def visit_print(self, element: Print) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_assign(self, element: Assign) -> ExpT:
+    def visit_assign(self, element: Assign) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_array_assign(self, element: ArrayAssign) -> ExpT:
+    def visit_array_assign(self, element: ArrayAssign) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_and(self, element: And) -> ExpT:
+    def visit_and(self, element: And) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_less_than(self, element: LessThan) -> ExpT:
+    def visit_less_than(self, element: LessThan) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_plus(self, element: Plus) -> ExpT:
+    def visit_plus(self, element: Plus) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_minus(self, element: Minus) -> ExpT:
+    def visit_minus(self, element: Minus) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_times(self, element: Times) -> ExpT:
+    def visit_times(self, element: Times) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_array_lookup(self, element: ArrayLookup) -> ExpT:
+    def visit_array_lookup(self, element: ArrayLookup) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_array_length(self, element: ArrayLength) -> ExpT:
+    def visit_array_length(self, element: ArrayLength) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_call(self, element: Call) -> ExpT:
+    def visit_call(self, element: Call) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_integer_literal(self, element: IntegerLiteral) -> ExpT:
+    def visit_integer_literal(self, element: IntegerLiteral) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_true_exp(self, element: TrueExp) -> ExpT:
+    def visit_true_exp(self, element: TrueExp) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_false_exp(self, element: FalseExp) -> ExpT:
+    def visit_false_exp(self, element: FalseExp) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_identifier_exp(self, element: IdentifierExp) -> ExpT:
+    def visit_identifier_exp(self, element: IdentifierExp) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_this(self, element: This) -> ExpT:
+    def visit_this(self, element: This) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_new_array(self, element: NewArray) -> ExpT:
+    def visit_new_array(self, element: NewArray) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_new_object(self, element: NewObject) -> ExpT:
+    def visit_new_object(self, element: NewObject) -> translate.Exp:
         pass
 
 
     @abstractmethod
-    def visit_not(self, element: Not) -> ExpT:
+    def visit_not(self, element: Not) -> translate.Exp:
         pass
 
     @abstractmethod
-    def visit_identifier(self, element: Identifier) -> ExpT:
+    def visit_identifier(self, element: Identifier) -> translate.Exp:
         pass
