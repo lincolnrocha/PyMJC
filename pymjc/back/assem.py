@@ -2,6 +2,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from ast import match_case
 from io import StringIO
+from typing import List
 
 
 from pymjc.front.temp import Label, LabelList, Temp, TempList, TempMap
@@ -97,6 +98,19 @@ class InstrList():
     def __init__(self, head: Instr, tail: InstrList):
         self.head: Instr = head
         self.tail: InstrList = tail
+    
+    def to_list(self) -> List[Instr]:
+        instr_list = List[Instr]
+        current_head = self.head
+        current_tail = self.tail
+        while current_head is not None:
+            instr_list.append(current_head)
+            if current_tail is not None:
+                current_head = current_tail.head
+                current_tail = current_tail.tail
+            else:
+                current_head = None
+        return instr_list
 
 
 class LABEL(Instr):

@@ -1,6 +1,5 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from ast import stmt
 import sys
 
 from pymjc.front.temp import DefaultMap, Label, LabelList, Temp, TempMap
@@ -17,9 +16,22 @@ class Exp(ABC):
         pass
 
 class ExpList():
-    def __init__(self, head: Exp, tail: ExpList):
+    def __init__(self, head: Exp = None, tail: ExpList = None):
         self.head: Exp = head
         self.tail: ExpList = tail
+
+    def add_head(self, element: Exp):
+        self.tail = ExpList(self.head, self.tail)
+        self.head = element
+    
+    def add_tail(self, element: Exp):
+        if self.head is None:
+            self.head = element
+        else:
+            last: ExpList = self.tail
+            while last is not None:
+                last = last.tail
+            last.tail = ExpList(element, None)
 
 class BINOP(Exp):
     PLUS = 0

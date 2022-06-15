@@ -16,7 +16,7 @@ class Frag():
     def __init__(self, frag: Frag = None):
         self.nex: Frag = frag
 
-    def add_next(self, Frag next) -> None:
+    def add_next(self, next: Frag) -> None:
         self.next = next
 
     def get_next(self) -> Frag:

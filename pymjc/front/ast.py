@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 
-from pymjc.front.visitortypes import *
+from pymjc.front.visitorkinds import *
 
 class Component(ABC):
     @abstractmethod

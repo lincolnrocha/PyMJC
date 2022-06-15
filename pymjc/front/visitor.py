@@ -6,7 +6,7 @@ from pymjc.front.ast import *
 from pymjc.front.frame import Frame
 from pymjc.front.translate import Frag
 from pymjc.front.tree import Stm
-from pymjc.front.visitortypes import *
+from pymjc.front.visitorkinds import *
 from pymjc.front.symbol import *
 from pymjc.log import MJLogger
 

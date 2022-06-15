@@ -16,9 +16,24 @@ class Temp():
 
 class TempList():
     
-    def __init__(self, head: Temp, tail: TempList):
+    def __init__(self, head: Temp = None, tail: TempList = None):
         self.head: Temp = head
         self.tail: TempList = tail
+    
+    def add_head(self, element: Temp):
+        self.tail = TempList(self.head, self.tail)
+        self.head = element
+    
+    def add_tail(self, element: Temp):
+        if self.head is None:
+            self.head = element
+        else:
+            last: TempList = self.tail
+            while last is not None:
+                last = last.tail
+            last.tail = TempList(element, None)
+
+        
 
 
 class TempMap(ABC):
