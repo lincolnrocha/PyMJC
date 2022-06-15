@@ -508,7 +508,7 @@ class MipsFrame(frame.Frame):
                         lit += "\\" + ((v >> 6) & 7) + ((v >> 3) & 7) + (v & 7)
                     else:
                         lit += c
-        return "\t.data\n\t.word " + length + "\n" + label.to_string() + ":\t.asciiz\t\"" + lit + "\"";
+        return "\t.data\n\t.word " + str(length) + "\n" + label.to_string() + ":\t.asciiz\t\"" + lit + "\""
 
     def bad_ptr(self) -> temp.Label:
         MipsFrame.bad_ptr

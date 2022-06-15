@@ -1,14 +1,17 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 import enum
+from typing import List
+from pymjc.back.assem import MOVE
 
 from pymjc.front.ast import *
 from pymjc.front.frame import Frame
 from pymjc.front import translate
-from pymjc.front.tree import Stm
+from pymjc.front import tree #CONST, Stm, MOVE
 from pymjc.front.visitorkinds import *
 from pymjc.front.symbol import *
 from pymjc.log import MJLogger
+from pymjc.util import Converter
 
 class SemanticErrorType(enum.Enum):
     ALREADY_DECLARED_CLASS = 1
@@ -1494,7 +1497,10 @@ class TranslateVisitor(IRVisitor):
     def __init__(self, symbol_table: SymbolTable, frame: Frame) -> None:
         super().__init__()
         self.symbol_table: SymbolTable = symbol_table
-        self.frame: Frame = frame
+        self.current_frame: Frame = frame
+        self.frags: translate.Frag = translate.Frag()
+        self.head_frags = self.frags
+        self.var_access = {}
         self.src_file_name = "UnknownSRCFile"
 
     def set_symbol_table(self, symbol_table: SymbolTable):
@@ -1503,35 +1509,101 @@ class TranslateVisitor(IRVisitor):
     def get_symbol_table(self) -> SymbolTable:
         return self.symbol_table
 
-    def proc_entry_exit(self, body: Stm) -> None:
-        pass
+    def proc_entry_exit(self, body: tree.Stm) -> None:
+        proc_frag = translate.ProcFrag(body, self.current_frame)
+        self.frags.add_next(proc_frag)
+        self.frags = self.frags.get_next()
 
     def get_result(self) -> translate.Frag:
-        pass
+        return self.head_frags
 
-    @abstractmethod
     def visit_program(self, element: Program) -> translate.Exp:
-        pass
+        element.main_class.accept_ir(self)
 
-    @abstractmethod
+        for index in range(len(element.class_decl_list)):
+            element.class_decl_list.element_at(index).accept_ir(self)
+
+        return None
+
     def visit_main_class(self, element: MainClass) -> translate.Exp:
-        pass
+        element.class_name_id.accept_ir(self)
+        element.arg_name_id.accept_ir(self)
+        self.symbol_table.set_curr_class(element.class_name_id.name)
+        self.symbol_table.set_curr_method("main")
 
-    @abstractmethod
+        escapes_list = List[bool]
+        for i in range(self.symbol_table.curr_method.get_num_params()):
+            escapes_list.append(False)
+        
+        frame_aux = self.current_frame.new_frame(Symbol.symbol(element.class_name_id.name + "$" + self.symbol_table.curr_method_name), escapes_list)
+        self.current_frame = frame_aux
+        
+        stmt: translate.Exp = element.statement.accept_ir(self)
+        return_exp: translate.Exp = translate.Exp(tree.CONST(0))
+        body: tree.Stm = tree.MOVE(tree.TEMP(self.current_frame.RV()), tree.ESEQ(tree.EXP(stmt.un_ex()), return_exp.un_ex()))
+
+        stmt_list = List[tree.Stm]
+        stmt_list.append(body)
+        self.current_frame.proc_entry_exit1(stmt_list)
+        self.proc_entry_exit(Converter.to_SEQ(stmt_list))
+
+        return None
+
+
     def visit_class_decl_extends(self, element: ClassDeclExtends) -> translate.Exp:
         pass
 
-    @abstractmethod
     def visit_class_decl_simple(self, element: ClassDeclSimple) -> translate.Exp:
-        pass
+        element.class_name_id.accept_ir(self)
+        self.symbol_table.set_curr_class(element.class_name_id.name)
 
-    @abstractmethod
+        for index in range(element.var_decl_list.size()):
+            element.var_decl_list.element_at(index).accept_ir(self)
+        
+        for index in range(element.method_decl_list.size()):
+            element.method_decl_list.element_at(index).accept_ir(self)
+
+        return None
+
     def visit_var_decl(self, element: VarDecl) -> translate.Exp:
-        pass
+        element.name_id.accept_ir(self)
+        element.type.accept_ir(self)
+        return None
   
-    @abstractmethod
     def visit_method_decl(self, element: MethodDecl) -> translate.Exp:
-        pass
+        self.symbol_table.set_curr_method(element.name_id.name)
+        element.type.accept_ir(self)
+        element.name_id.accept_ir(self)
+
+        escapes_list = List[bool]
+
+        for index in range(element.formal_param_list.size()):
+            element.formal_param_list.element_at(index).accept_ir(self)
+            escapes_list.append(False)
+
+        for index in range(element.var_decl_list.size()):
+            element.var_decl_list.element_at(index).accept_ir(self)
+
+        self.current_frame = self.current_frame.new_frame(Symbol.symbol(self.symbol_table.curr_class_name + "$" + self.symbol_table.curr_method_name), escapes_list)
+
+        body: tree.Stm
+        body_list = List[tree.Stm]
+        return_exp: tree.Exp = element.return_exp.accept_ir(self).un_ex()
+
+        if element.statement_list.size() == 0:
+            body = tree.MOVE(tree.TEMP(self.current_frame.RV()), return_exp)
+        else:
+            body = tree.EXP(element.statement_list.element_at(0).accept_ir(self).un_ex())
+            for i in range(1, element.statement_list.size()):
+                body = tree.SEQ(body, tree.EXP(element.statement_list.element_at(i).accept_ir(self).un_ex()))
+            
+            body = tree.MOVE(tree.TEMP(self.current_frame.RV()), tree.ESEQ(body, return_exp))
+        
+        body_list.append(body)
+        self.current_frame.proc_entry_exit1(body_list)
+        self.proc_entry_exit(Converter.to_SEQ(body_list))
+        self.var_access = {}
+        return None
 
     @abstractmethod
     def visit_formal(self, element: Formal) -> translate.Exp:
@@ -1569,9 +1641,12 @@ class TranslateVisitor(IRVisitor):
     def visit_print(self, element: Print) -> translate.Exp:
         pass
 
-    @abstractmethod
     def visit_assign(self, element: Assign) -> translate.Exp:
-        pass
+        var: translate.Exp = element.left_side_id.accept_ir(self)
+        exp: translate.Exp = element.right_side_exp.accept_ir(self)
+        assign: tree.MOVE = tree.MOVE(var.un_ex(), exp.un_ex())
+
+        return translate.Exp(tree.ESEQ(assign, tree.CONST(0))) 
 
     @abstractmethod
     def visit_array_assign(self, element: ArrayAssign) -> translate.Exp:
