@@ -12,6 +12,8 @@ class B {
 	int oneAttribute;
 
     public int oneMethod(int param){
+        int oneVar;
+        int oneVar;
 	    return param ;
     }
 

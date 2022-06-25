@@ -1,7 +1,5 @@
 import logging
 
-from pymjc.front.visitor import SemanticErrorType
-
 class MJLogger():
 
     def configure():
@@ -13,5 +11,5 @@ class MJLogger():
     def parser_log(src_file_name: str, line_number: int, token_value: str):
         logging.error(f'PARSER - {src_file_name}, Line {line_number}: Syntax error near character {token_value}')
     
-    def semantic_log(src_file_name: str, token_value: str, error_type: SemanticErrorType, error_msg: str):
-        logging.error(f'SEMANTIC - {src_file_name}: [{error_type.name}] Semantic error near character {token_value} - {error_msg}')
+    def semantic_log(src_file_name: str, error_type: str, error_msg: str):
+        logging.error(f'SEMANTIC - {src_file_name}: Semantic error [{error_type}] - {error_msg}')
