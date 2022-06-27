@@ -64,15 +64,15 @@
 
 1. Qual é o nome do relator?
 
-    > Escreva sua resposta aqui
+    > Raif Zeidam de Medeiros
 
 2. A etapa foi completamente ou parcialmente concluída?
 
-    > Escreva sua resposta aqui
+    > Parcialmente concluída
 
 3. No caso de parcialmente concluída, o que não foi concluído?
 
-    > Escreva sua resposta aqui
+    > Alguns métodos não foram completados/feitos corretamente
 
 4. O programa passa nos testes automatizados?
     
@@ -84,11 +84,11 @@
 
 6. Quais as dificuldades encontradas para realização da etapa do projeto?
     
-    > Escreva sua resposta aqui
+    > Implementar certos métodos, escolher as instruções certas, entender a teoria
 
 7. Qual a participação de cada membro da equipe na etapa de execução?
     
-    > Escreva sua resposta aqui
+    > Cada membro fez alguns métodos, após reunião em conjunto pelo discord e pelo telegram
 
 
 # 4º Relatóio: Etapa AI-d (Seleção de Instruções)
