@@ -448,7 +448,7 @@ class MipsFrame(frame.Frame):
     def alloc_local(self, escape: bool) -> frame.Access:
         if escape:
             result = InFrame(self.offset)
-            offser -= MipsFrame.word_size
+            self.offset -= MipsFrame.word_size
             return result
         else:
             return InReg(temp.Temp())

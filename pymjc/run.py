@@ -3,7 +3,7 @@ from pymjc.front.ast import Program
 
 from pymjc.front.lexer import MJLexer
 from pymjc.front.parser import MJParser
-from pymjc.front.visitor import PrettyPrintVisitor
+from pymjc.front.visitor import FillSymbolTableVisitor, PrettyPrintVisitor, TypeCheckingVisitor
 
 class MJCompiler():
 
@@ -13,11 +13,18 @@ class MJCompiler():
         lexer.src_file_name = source_file.name
         parser = MJParser()
         parser.src_file_name = source_file.name
-        result:Program = parser.parse(lexer.tokenize(source_code))
+        program:Program = parser.parse(lexer.tokenize(source_code))
 
-        print("AST PrettyPrintVisitor")
-        visitor = PrettyPrintVisitor()
-        visitor.visit_program(result)
+        symbol_table_creator = FillSymbolTableVisitor()
+        symbol_table_creator.src_file_name = source_file.name
+        symbol_table_creator.init_semantic_errors()
+        symbol_table_creator.visit_program(program)
+
+        type_checker = TypeCheckingVisitor()
+        type_checker.src_file_name = source_file.name
+        type_checker.fill_semantic_errors(symbol_table_creator.semantic_errors)
+        type_checker.set_symbol_table(symbol_table_creator.get_symbol_table())
+        type_checker.visit_program(program)
         
 
 if __name__ == '__main__':
