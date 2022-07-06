@@ -1,9 +1,12 @@
 import sys
+
+from pymjc.back.mips import MipsFrame
 from pymjc.front.ast import Program
 
+from pymjc.front import translate
 from pymjc.front.lexer import MJLexer
 from pymjc.front.parser import MJParser
-from pymjc.front.visitor import FillSymbolTableVisitor, PrettyPrintVisitor, TypeCheckingVisitor
+from pymjc.front.visitor import FillSymbolTableVisitor, PrettyPrintVisitor, TranslateVisitor, TypeCheckingVisitor
 
 class MJCompiler():
 
@@ -25,7 +28,14 @@ class MJCompiler():
         type_checker.fill_semantic_errors(symbol_table_creator.semantic_errors)
         type_checker.set_symbol_table(symbol_table_creator.get_symbol_table())
         type_checker.visit_program(program)
+
+        translate_visitor = TranslateVisitor(symbol_table_creator.get_symbol_table(), MipsFrame())
+        translate_visitor.src_file_name = source_file.name
+        translate_visitor.visit_program(program)
+        translate_visitor.set_symbol_table(symbol_table_creator.get_symbol_table())
+        frags: translate.Frag = translate_visitor.get_result()
         
+
 
 if __name__ == '__main__':
     args = sys.argv[1:]
