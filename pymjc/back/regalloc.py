@@ -1,4 +1,5 @@
 from __future__ import annotations
+from abc import abstractmethod
 from pymjc.back import graph
 from pymjc.back import flowgraph
 from pymjc.front import temp
