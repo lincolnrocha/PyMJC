@@ -186,7 +186,7 @@ class Canon():
 class TraceSchedule():
 
     def __init__(self, the_blocks: BasicBlocks):
-        self.stms: tree.StmList
+        self.stms: tree.StmList = None
         self.the_blocks: BasicBlocks = the_blocks
         self.table = {}
         stm_list: StmListList = the_blocks.blocks 
