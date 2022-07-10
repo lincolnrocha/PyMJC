@@ -5,6 +5,7 @@ from pymjc.front import frame, temp
 
 class RegAlloc (temp.TempMap):
     def __init__(self, frame: frame.Frame, instr_list: assem.InstrList):
+        self.frame: frame.Frame = frame
         self.instrs: assem.InstrList = instr_list
         #TODO
 

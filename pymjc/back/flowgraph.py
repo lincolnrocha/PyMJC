@@ -129,10 +129,17 @@ class AssemFlowGraph (FlowGraph):
         return self.instructions.get(node)
 
     def deff(self, node: graph.Node) -> temp.TempList:
-        return self.instructions.get(node).deff()
+        deff_instr: assem.Instr = self.instructions.get(node)
+        if deff_instr is not None:
+            return deff_instr.deff()
+
+        return None
 	
     def use(self, node: graph.Node) -> temp.TempList:
-        return self.instructions.get(node).use()
+        use_instr: assem.Instr = self.instructions.get(node)
+        if use_instr is not None:
+            return use_instr.use()
+        return None
 	
     def is_move(self, node: graph.Node) -> bool:
         return isinstance(self.instructions.get(node), assem.MOVE)
