@@ -5,53 +5,53 @@ from io import StringIO
 from typing import List
 
 
-from pymjc.front.temp import Label, LabelList, Temp, TempList, TempMap
+from pymjc.front import temp
 
 
 class Targets():
 
-  def __init__(self, labels: LabelList):
+  def __init__(self, labels: temp.LabelList):
     self.labels = labels
 
 class Instr(ABC):
 
     @abstractmethod
-    def use(self) -> TempList:
+    def use(self) -> temp.TempList:
         pass
 
     @abstractmethod
-    def deff(self) -> TempList:
+    def deff(self) -> temp.TempList:
         pass
 
     @abstractmethod
     def jumps(self) -> Targets:
         pass
 
-    def nth_temp(self, temp_list: TempList, i: int) -> Temp:
+    def nth_temp(self, temp_list: temp.TempList, i: int) -> temp.Temp:
         if i == 0:
             return temp_list.head
         else:
             return self.nth_temp(temp_list.tail, i - 1)
   
 
-    def nth_label(self, label_list: LabelList, i: int) -> Label:
+    def nth_label(self, label_list: temp.LabelList, i: int) -> temp.Label:
         if i == 0:
             return label_list.head
         else:
             return self.nth_label(label_list.tail, i - 1)
 
 
-    def format(self, temp_map: TempMap) -> str:
-        dest: TempList = self.deff()
-        src: TempList = self.use()
+    def format(self, temp_map: temp.TempMap) -> str:
+        dest: temp.TempList = self.deff()
+        src: temp.TempList = self.use()
         j: Targets = self.jumps()
-        jump: LabelList = None
+        jump: temp.LabelList = None
         if j is not None:
             jump = j.labels
 
         s: StringIO = StringIO()
         length: int = len(self.assem)
-        t: Temp
+        t: temp.Temp
 
         for i in len(self.assem):
             if (self.assem[i] == '`'):
@@ -114,14 +114,14 @@ class InstrList():
 
 
 class LABEL(Instr):
-   def __init__(self, assem: str, label: Label):
+   def __init__(self, assem: str, label: temp.Label):
       self.assem: str = assem
-      self.label: Label = label
+      self.label: temp.Label = label
 
-   def use(self) -> TempList:
+   def use(self) -> temp.TempList:
       return None
 
-   def deff(self) -> TempList:
+   def deff(self) -> temp.TempList:
       return None
 
    def jumps(self) -> Targets:
@@ -130,36 +130,36 @@ class LABEL(Instr):
 
 
 class MOVE(Instr):
-   def __init__(self, assem: str, dest: Temp, src: Temp):
+   def __init__(self, assem: str, dest: temp.Temp, src: temp.Temp):
       self.assem: str = assem
-      self.dest: Temp = dest
-      self.src: Temp = src 
+      self.dest: temp.Temp = dest
+      self.src: temp.Temp = src 
 
-   def use(self) -> TempList:
-      return TempList(self.src, None)
+   def use(self) -> temp.TempList:
+      return temp.TempList(self.src, None)
 
-   def deff(self) -> TempList:
-      return TempList(self.dest, None)
+   def deff(self) -> temp.TempList:
+      return temp.TempList(self.dest, None)
 
    def jumps(self) -> Targets:
       return None
 
 
 class OPER(Instr):
-    def __init__(self, assem: str, dest: TempList, src: TempList, j: LabelList = None):
+    def __init__(self, assem: str, dest: temp.TempList, src: temp.TempList, j: temp.LabelList = None):
        self.assem: str = assem
-       self.dest: TempList = dest
-       self.src: TempList = src
+       self.dest: temp.TempList = dest
+       self.src: temp.TempList = src
        
        if j is not None:
            self.jump = Targets(j)
        else:
            self.jump = None 
     
-    def use(self) -> TempList:
+    def use(self) -> temp.TempList:
         return self.src
 
-    def deff(self) -> TempList:
+    def deff(self) -> temp.TempList:
         return self.dest
 
     def jumps(self) -> Targets:
