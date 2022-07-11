@@ -1,10 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from atexit import register
 
-from pymjc.front import frame
-from pymjc.front import tree
-from pymjc.front import temp
+from pymjc.front import frame, temp, tree
 
 
 class Exp(ABC):

@@ -2,10 +2,8 @@ from __future__ import annotations
 from abc import abstractmethod
 import sys
 from typing import List
-from pymjc.back import assem
-from pymjc.back import graph
-from pymjc.front import temp
-from pymjc.front import tree
+from pymjc.back import assem, graph
+from pymjc.front import temp, tree
 
 class FlowGraph (graph.Graph):
     

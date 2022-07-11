@@ -58,6 +58,7 @@ class MJCompiler():
 
             frag = frag.get_next()
 
+        #Flow Graph Building
         flow_graph: flowgraph.AssemFlowGraph = None
         for assem_instr in frags_assem_instr:
             flow_graph = flowgraph.AssemFlowGraph(util.Converter.to_InstrList(assem_instr))

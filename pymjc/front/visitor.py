@@ -5,9 +5,7 @@ from typing import List
 
 from pymjc.front.ast import *
 from pymjc.front.frame import Access, Frame
-from pymjc.front import translate
-from pymjc.front import tree
-from pymjc.front import temp
+from pymjc.front import temp, translate, tree
 from pymjc.front.visitorkinds import *
 from pymjc.front.symbol import *
 from pymjc.log import MJLogger

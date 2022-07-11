@@ -1,6 +1,5 @@
 from __future__ import annotations
-from pymjc.front import tree
-from pymjc.front import temp
+from pymjc.front import temp, tree
 
 class StmListList():
 
