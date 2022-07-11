@@ -63,7 +63,7 @@ class AssemFlowGraph (FlowGraph):
     def __init__(self, instrs: assem.InstrList):
         self.instructions = {}
         self.labels = {}
-        self.maping =  {}
+        self.mapping =  {}
 
         node: graph.Node = None
         last_node: graph.Node = None
@@ -85,7 +85,7 @@ class AssemFlowGraph (FlowGraph):
                 if (label_instr is not None):
                     self.labels[node] = label_instr.label
                     for l in label_list:
-                        self.maping[l.label] = node
+                        self.mapping[l.label] = node
                     
                     label_list = List[assem.Instr]
                     label_instr = None
@@ -106,10 +106,10 @@ class AssemFlowGraph (FlowGraph):
                     jump_labels: temp.LabelList = oper.jumps().labels
                     while(jump_labels is not None):
                         l: temp.Label = jump_labels.head
-                        if (self.maping.get(l) is None):
+                        if (self.mapping.get(l) is None):
                             self.add_edge(self.get_node_by_id(i), last_node)
                         else:
-                            self.add_edge(self.get_node_by_id(i), self.maping.get(l))
+                            self.add_edge(self.get_node_by_id(i), self.mapping.get(l))
                         jump_labels = jump_labels.tail
                 i += 1
             a = a.tail
