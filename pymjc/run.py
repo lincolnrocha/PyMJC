@@ -2,7 +2,7 @@ import sys
 from typing import List
 
 from pymjc import util
-from pymjc.back import assem, flowgraph, mips
+from pymjc.back import assem, flowgraph, mips, regalloc
 from pymjc.front import ast, canon, lexer, parser,translate, tree, visitor
 
 class MJCompiler():
@@ -43,7 +43,7 @@ class MJCompiler():
         frag: translate.Frag = program_frags
         while(frag is not None):
             if(isinstance(frag, translate.ProcFrag)):
-                stm_list = canon.linearize(frag.body)
+                stm_list = canon.Canon.linearize(frag.body)
                 basic_blocks: canon.BasicBlocks = canon.BasicBlocks(stm_list)
                 schedule: canon.TraceSchedule  = canon.TraceSchedule(basic_blocks)
                 assem_instr = List[assem.Instr]
@@ -58,6 +58,7 @@ class MJCompiler():
 
             frag = frag.get_next()
 
+        #Flow Graph Building
         flow_graph: flowgraph.AssemFlowGraph = None
         for assem_instr in frags_assem_instr:
             flow_graph = flowgraph.AssemFlowGraph(util.Converter.to_InstrList(assem_instr))

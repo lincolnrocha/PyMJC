@@ -1,6 +1,5 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from ast import match_case
 from io import StringIO
 from typing import List
 
@@ -53,7 +52,7 @@ class Instr(ABC):
         length: int = len(self.assem)
         t: temp.Temp
 
-        for i in len(self.assem):
+        for i in range(length):
             if (self.assem[i] == '`'):
                 i += 1
                 match(self.assem[i]):

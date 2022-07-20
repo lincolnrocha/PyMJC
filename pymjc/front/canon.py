@@ -1,6 +1,5 @@
 from __future__ import annotations
-from pymjc.front import tree
-from pymjc.front import temp
+from pymjc.front import temp, tree
 
 class StmListList():
 
@@ -234,7 +233,7 @@ class TraceSchedule():
                 else:
                     ff: temp.Label = temp.Label()
                     last.tail.head = tree.CJUMP(s.rel_op, s.left_exp, s.right_exp, s.if_true, ff)
-                    last.tail.tail = tree.StmList(tree.LABEL(ff), tree.StmList(tree.JUMP(j.iffalse), self.get_next()))
+                    last.tail.tail = tree.StmList(tree.LABEL(ff), tree.StmList(tree.JUMP(s.if_false), self.get_next()))
                     return None
             else:
                 raise RuntimeError("Bad basic block in TraceSchedule")
